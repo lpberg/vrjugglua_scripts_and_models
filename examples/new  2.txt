@@ -1,0 +1,2 @@
+--Recreating light techneque from OSG Tutorial: http://www.openscenegraph.org/projects/osg/attachment/wiki/Support/Tutorials/Tuto9.zip
+light
