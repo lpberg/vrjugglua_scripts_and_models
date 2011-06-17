@@ -39,7 +39,7 @@ function addSpotLight(arg)
 	if arg.spotexponent ~= nil then
 		l:setSpotExponent(arg.spotexponent)
 	else
-		l:setSpotExponent(0.5)	
+		l:setSpotExpone	nt(0.5)	
 	end
 	
 	local ls = osg.LightSource()

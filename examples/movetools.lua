@@ -1,4 +1,34 @@
+
+
 Rotation = {
+	rotate = function(xform,axis,degree,degreeperdt,dt)
+		if axis == nil and custAxis then
+			A = custAxis
+		else
+			A = {x=0,y=0,z=0}
+			if A[axis] == nil then 
+				error("error: second argument must be x,y, or z", 2)
+			end
+			A[axis] = (degree/math.abs(degree))
+			print(A[axis])
+		end
+		local theAxis = Axis{A.x,A.y,A.z}
+		local dt = Actions.waitForRedraw()
+		local function rotateAction()
+			local dt = Actions.waitForRedraw()
+			local angle = 0
+			while angle < math.abs(degree) do
+				angle = angle + degreeperdt * dt
+				xform:preMult(
+					osg.Matrixd(
+						AngleAxis(Degrees(degreeperdt * dt), theAxis)
+					)
+				)
+				dt = Actions.waitForRedraw()
+			end
+		end
+		return rotateAction
+	end,
 	createRotation = function(xform,axis,degree,custAxis)
 		if axis == nil and custAxis then
 			A = custAxis

@@ -1,53 +1,55 @@
-require("getScriptFilename")
-fn = getScriptFilename()
-assert(fn, "Have to load this from file, not copy and paste, or we can't find our models!")
-vrjLua.appendToModelSearchPath(fn)
+do
+	require("StockModels")
+	require("getScriptFilename")
+	fn = getScriptFilename()
+	assert(fn, "Have to load this from file, not copy and paste, or we can't find our models!")
+	vrjLua.appendToModelSearchPath(fn)
+	ss = RelativeTo.World:getOrCreateStateSet()
+	ss:setMode(0x0B50,osg.StateAttribute.Values.ON)
+end
 
-require("StockModels")
-
-newroom = Transform{
-	orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
-	scale = ScaleFrom.inches,
-	Model("basicfactory.ive")
-}
-
-
-teapot = Transform{
-	position = {0, 1, 0},
-	StockModels.Teapot()
-}
-RelativeTo.World:addChild(newroom)
-RelativeTo.World:addChild(teapot)
-
-ss = RelativeTo.World:getOrCreateStateSet()
+do
+	newroom = Transform{
+		orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
+		scale = ScaleFrom.inches,
+		Model("X:/Users/lpberg/VRJuggLua/models/basicFactory.ive")
+	}
+	teapot = Transform{
+		position = {0, 1, 0},
+		StockModels.Teapot()
+	}
+	lightGroup = osg.Group()
+	RelativeTo.World:addChild(lightGroup)
+	RelativeTo.World:addChild(newroom)
+	RelativeTo.World:addChild(teapot)
 	
-function doLight1()
-	--[[
-	l1 = Light{
-		number = 0,
-		ambient = 0.9,
-		diffuse = 0.7,
-		specular = 0.5,
-		position = {0, 1, 1},
-		positional = true
-	}]]
-	--l1:setSpotCutoff(20)
-	--l1:setSpotExponent(50)
+end
+	
+function doLight1(parent)
 	l1 = osg.Light()
+	l1:setLightNum(0)
+	
+	l1:setAmbient(osg.Vec4(1.0,0.0,0.0,1.0))
+	l1:setDiffuse(osg.Vec4(1.0,0.0,0.0,1.0))
+	l1:setSpotCutoff(20)
+	l1:setSpotExponent(50)
+	l1:setDirection(osg.Vec3(0.0,-1.0,0.0))
+	
 	ls1 = osg.LightSource()
 	ls1:setLight(l1)
 	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
-	
-	-- This next line is equivalent to
-	-- ls1:setStateSetModes(ss, osg.StateAttribute.Values.ON)
-	ss:setAssociatedModes(l1, osg.StateAttribute.Values.ON)
+	parent:getOrCreateStateSet():setAssociatedModes(l1, osg.StateAttribute.Values.ON)
 
-	RelativeTo.Room:addChild(
+
+	parent:addChild(
 		ls1
 	)
+	l1:setPosition(osg.Vec4(1.0,1.0,1.0,1.0))
 	-- some kind of bug in scene.lua that makes it set position of lights wrong
-	l1:setPosition(osg.Vec4(0, 1, 1, 1))
+	--l1:setPosition(osg.Vec4(0, 1, 1, 1))
 end
+
+doLight1(RelativeTo.World)
 
 function doLight2()
 	--[[
