@@ -2,16 +2,11 @@
 
 Rotation = {
 	rotate = function(xform,axis,degree,degreeperdt,dt)
-		if axis == nil and custAxis then
-			A = custAxis
-		else
-			A = {x=0,y=0,z=0}
-			if A[axis] == nil then 
-				error("error: second argument must be x,y, or z", 2)
-			end
-			A[axis] = (degree/math.abs(degree))
-			print(A[axis])
+		A = {x=0,y=0,z=0}
+		if A[axis] == nil then 
+			error("error: second argument must be x,y, or z", 2)
 		end
+		A[axis] = (degree/math.abs(degree))
 		local theAxis = Axis{A.x,A.y,A.z}
 		local dt = Actions.waitForRedraw()
 		local function rotateAction()

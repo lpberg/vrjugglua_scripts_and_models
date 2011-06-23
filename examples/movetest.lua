@@ -2,24 +2,56 @@ require("DebugAxes")
 require("StockModels")
 require("Actions")
 dofile([[C:\Users\lpberg\Dropbox\Vance_Research\VRJuggLua\examples\movetools.lua]])
-vrjLua.appendToModelSearchPath("X:/Users/lpberg/VRJuggLua/models/")
+vrjLua.appendToModelSearchPath("C:\Users\lpberg\Dropbox\Vance_Research\VRJuggLua\models")
 
-teapot = Transform{
-	position = {0,1,0},
-	StockModels.Teapot(),
+mtr = osg.MatrixTransform()
+mta = osg.MatrixTransform()
+
+roboArm = Transform{
+	Model("C:/Users/lpberg/Dropbox/Vance_Research/VRJuggLua/models/arm.osg"),
 }
-mt = osg.MatrixTransform()
-mt:addChild(teapot)
+ext = Transform {
+	position = {-1,2.4,0},
+	mta,
+}
+roboBase = Transform{
+	Model([[C:/Users/lpberg/Dropbox/Vance_Research/VRJuggLua/models/Robot Bottom.osg]]),
+} 
+
+
+mtr:addChild(roboBase)
+mtr:addChild(ext)
+mta:addChild(roboArm)
+
+-- robot = Transform {
+	-- mt,
+	-- mt2,
+-- }
+
+
+
 
 moveTeapot = function()
-	local r = Rotation.rotate(mt,"y",90,40)
-	local r2 = Rotation.rotate(mt,"y",-90,40)
+	local r1 = Rotation.rotate(mtr,"y",90,40)
+	local r2 = Rotation.rotate(mtr,"y",-90,40)
+	local r3 = Rotation.rotate(mta,"z",-45,40)
+	local r4 = Rotation.rotate(mta,"z",45,40)
 	while true do
-		r()
+		r1()
+		Actions.waitSeconds(.5)
+		r3()
+		Actions.waitSeconds(.5)
+		r4()
 		Actions.waitSeconds(.5)
 		r2()
+		Actions.waitSeconds(.5)
+		r3()
+		Actions.waitSeconds(.5)
+		r4()
+		Actions.waitSeconds(.5)
 	end
 end
+Actions.addFrameAction(moveTeapot)
+RelativeTo.World:addChild(mtr)
 
-RelativeTo.World:addChild(mt)
 
