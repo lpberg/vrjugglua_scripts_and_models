@@ -1,57 +1,57 @@
 require("DebugAxes")
 require("StockModels")
 require("Actions")
-dofile([[C:\Users\lpberg\Dropbox\Vance_Research\VRJuggLua\examples\movetools.lua]])
-vrjLua.appendToModelSearchPath("C:\Users\lpberg\Dropbox\Vance_Research\VRJuggLua\models")
+require("getScriptFilename")
+vrjLua.appendToModelSearchPath(getScriptFilename())
+dofile(vrjLua.findInModelSearchPath("../movetools.lua"))
+vrjLua.appendToModelSearchPath(vrjLua.findInModelSearchPath("../models/"))
 
-mtr = osg.MatrixTransform()
-mta = osg.MatrixTransform()
+matrix_xform_robot = osg.MatrixTransform()
+matrix_xform_arm = osg.MatrixTransform()
 
 roboArm = Transform{
-	Model("C:/Users/lpberg/Dropbox/Vance_Research/VRJuggLua/models/arm.osg"),
+	Model ([[arm.osg]]),
 }
-ext = Transform {
+matrix_xform_arm:addChild(roboArm)
+
+heightExtention = Transform {
 	position = {-1,2.4,0},
-	mta,
+	matrix_xform_arm,
 }
+
+matrix_xform_robot:addChild(heightExtention)  
+
 roboBase = Transform{
-	Model([[C:/Users/lpberg/Dropbox/Vance_Research/VRJuggLua/models/Robot Bottom.osg]]),
+	Model([[Robot Bottom.osg]]),
 } 
+matrix_xform_robot:addChild(roboBase)
 
+robot = Transform{
+	matrix_xform_robot,
+}
+RelativeTo.World:addChild(robot)  
 
-mtr:addChild(roboBase)
-mtr:addChild(ext)
-mta:addChild(roboArm)
-
--- robot = Transform {
-	-- mt,
-	-- mt2,
--- }
-
-
-
-
-moveTeapot = function()
-	local r1 = Rotation.rotate(mtr,"y",90,40)
-	local r2 = Rotation.rotate(mtr,"y",-90,40)
-	local r3 = Rotation.rotate(mta,"z",-45,40)
-	local r4 = Rotation.rotate(mta,"z",45,40)
+moveRobot = function()
+	local toLeft = Rotation.rotate(matrix_xform_robot,"y",90,40)
+	local toRight = Rotation.rotate(matrix_xform_robot,"y",-90,40)
+	local armDown = Rotation.rotate(matrix_xform_arm,"z",-45,40)
+	local armUp = Rotation.rotate(matrix_xform_arm,"z",45,40)
 	while true do
-		r1()
-		Actions.waitSeconds(.5)
-		r3()
-		Actions.waitSeconds(.5)
-		r4()
-		Actions.waitSeconds(.5)
-		r2()
-		Actions.waitSeconds(.5)
-		r3()
-		Actions.waitSeconds(.5)
-		r4()
-		Actions.waitSeconds(.5)
+		toLeft()
+		Actions.waitSeconds(.25)
+		armDown()
+		Actions.waitSeconds(.25)
+		armUp()
+		Actions.waitSeconds(.25)
+		toRight()
+		Actions.waitSeconds(.25)
+		armDown()
+		Actions.waitSeconds(.25)
+		armUp()
+		Actions.waitSeconds(.25)
 	end
 end
-Actions.addFrameAction(moveTeapot)
-RelativeTo.World:addChild(mtr)
+Actions.addFrameAction(moveRobot)
+
 
 
