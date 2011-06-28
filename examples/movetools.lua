@@ -76,14 +76,20 @@ end
 
 Transformation = {
 	move_slow = function(xform,rate,x,y,z)
-		local f = function(dt)
-			local goal = osg.Vec3d(x, y, z)
+		local f = function()
+			local pos = xform:getPosition()
+			local dt = Actions.waitForRedraw()
+			local goal = osg.Vec3d(pos:x()+x,pos:y()+y,pos:z()+ z)
 			rate = rate or .005
-			for steps=.01, 1, rate do
+			local steps = 1
+			--for steps=1, 100, .005 do
+			while true do 
 				local currentPos = xform:getPosition()
-				local newPos = (goal - currentPos) * steps*dt + currentPos
+				local newPos = (goal - pos) * dt*rate + currentPos
 				xform:setPosition(newPos)
 				dt = Actions.waitForRedraw()
+				--steps = steps + rate
+				if currentPos:x() > goal:x()  then break end
 			end
 		end
 		return f

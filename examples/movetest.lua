@@ -32,10 +32,12 @@ robot = Transform{
 RelativeTo.World:addChild(robot)  
 
 moveRobot = function()
+	local pos = robot:getPosition()
 	local toLeft = Rotation.rotate(matrix_xform_robot,"y",90,40)
 	local toRight = Rotation.rotate(matrix_xform_robot,"y",-90,40)
 	local armDown = Rotation.rotate(matrix_xform_arm,"z",-45,40)
 	local armUp = Rotation.rotate(matrix_xform_arm,"z",45,40)
+	local slightXLeft = Transformation.move_slow(robot,.3,2,1,0)
 	while true do
 		toLeft()
 		Actions.waitSeconds(.25)
@@ -49,9 +51,12 @@ moveRobot = function()
 		Actions.waitSeconds(.25)
 		armUp()
 		Actions.waitSeconds(.25)
+		slightXLeft()
+		print(robot:getPosition():x())
+		Actions.waitSeconds(.25)
 	end
 end
-Actions.addFrameAction(moveRobot)
+--Actions.addFrameAction(moveRobot)
 
 
 
