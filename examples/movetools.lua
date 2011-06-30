@@ -89,7 +89,7 @@ Transformation = {
 				xform:setPosition(newPos)
 				dt = Actions.waitForRedraw()
 				--steps = steps + rate
-				if currentPos:x() > goal:x()  then break end
+				if (math.abs(currentPos:x()) - abs(goal:x())) < .01  then break end
 			end
 		end
 		return f
