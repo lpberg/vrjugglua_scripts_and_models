@@ -37,7 +37,7 @@ moveRobot = function()
 	local armDown = Rotation.rotate(matrix_xform_arm,"z",-45,40)
 	local armUp = Rotation.rotate(matrix_xform_arm,"z",45,40)
 	local slightXLeft = Transformation.move_slow(robot,.3,2,1,0)
-	do
+	while true do
 		toLeft()
 		Actions.waitSeconds(.25)
 		armDown()

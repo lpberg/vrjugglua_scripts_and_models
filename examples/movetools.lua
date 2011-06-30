@@ -82,15 +82,17 @@ Transformation = {
 			local goal = osg.Vec3d(pos:x()+x,pos:y()+y,pos:z()+ z)
 			rate = rate or .005
 			local steps = 1
-			--for steps=1, 100, .005 do
 			while true do 
+				print("here")
 				local currentPos = xform:getPosition()
 				local newPos = (goal - pos) * dt*rate + currentPos
 				xform:setPosition(newPos)
 				dt = Actions.waitForRedraw()
-				--steps = steps + rate
-				if (math.abs(currentPos:x()) - math.abs(goal:x())) < .01  then break end
+				local x = math.abs(math.abs(currentPos:x()) - math.abs(goal:x()))
+				print(x)
+				if (x < 0.1)  then return end
 			end
+			print("outside of While")
 		end
 		return f
 	end,
