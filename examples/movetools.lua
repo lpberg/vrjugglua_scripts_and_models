@@ -1,5 +1,3 @@
-
-
 Rotation = {
 	rotate = function(xform,axis,degree,degreeperdt,dt)
 		A = {x=0,y=0,z=0}
@@ -81,14 +79,20 @@ Transformation = {
 			local dt = Actions.waitForRedraw()
 			local goal = osg.Vec3d(pos:x()+x,pos:y()+y,pos:z()+ z)
 			rate = rate or .5
-			local steps = 1
+			local distance_to_travel = (goal - pos):length()
 			while true do 
 				local currentPos = xform:getPosition()
 				local newPos = (goal - pos) * dt*rate + currentPos
-				xform:setPosition(newPos)
+				local could_travel = (newPos - currentPos):length()
+				if (could_travel > distance_to_travel) then
+					newPos = (goal - pos) * distance_to_travel + currentPos	
+					xform:setPosition(newPos)
+					break
+				else
+					xform:setPosition(newPos)
+					distance_to_travel = distance_to_travel - could_travel
+				end
 				dt = Actions.waitForRedraw()
-				local x = math.abs(math.abs(currentPos:x()) - math.abs(goal:x()))
-				if (x < 0.1)  then return end
 			end
 		end
 		return f
