@@ -4,20 +4,20 @@ assert(fn, "Have to load this from file, not copy and paste, or we can't find ou
 vrjLua.appendToModelSearchPath(fn)
 vrjLua.appendToModelSearchPath(vrjLua.findInModelSearchPath("../../models/"))
 
--- factory = Transform{
-	-- orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
-	-- scale = ScaleFrom.inches,
-	-- Model("basicfactory.ive")
--- }
--- RelativeTo.World:addChild(factory)
+factory = Transform{
+	orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
+	scale = ScaleFrom.inches,
+	Model("basicfactory.ive")
+}
+RelativeTo.World:addChild(factory)
 
 ss = RelativeTo.World:getOrCreateStateSet()
-RelativeTo.World:addChild(Sphere{radius=.23, position = {0,1,1}})
-RelativeTo.World:addChild(Sphere{radius=.23, position = {1.5,2,-6}})
+RelativeTo.World:addChild(Sphere{radius=.23, position = {0,3,-5}})
+--RelativeTo.World:addChild(Sphere{radius=.23, position = {1.5,2,-6}})
 function doLight1()
 
 	l1 = osg.Light()
-	l1:setAmbient(osg.Vec4(.8, .8, 0.8, 1.0))
+	l1:setAmbient(osg.Vec4(0.8, 0.8, 0.8, 0.8))
 	ls1 = osg.LightSource()
 	ls1:setLight(l1)
 	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
@@ -26,7 +26,7 @@ function doLight1()
 		ls1
 	)
 
-	l1:setPosition(osg.Vec4(0, 1, 1, 1))
+	l1:setPosition(osg.Vec4(0, 3, -5, 1))
 end
 -- doLight1()
 function doLight1_5()
@@ -61,4 +61,4 @@ function doLight2()
 end
 
 doLight1()
---doLight1_5()
+doLight2()
