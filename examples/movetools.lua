@@ -94,6 +94,7 @@ Transformation = {
 				end
 				dt = Actions.waitForRedraw()
 			end
+			xform:setPosition(goal)
 		end
 		return f
 	end,
