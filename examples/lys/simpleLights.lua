@@ -61,4 +61,4 @@ function doLight2()
 end
 
 doLight1()
-doLight1_5()
+--doLight1_5()
