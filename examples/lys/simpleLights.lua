@@ -9,7 +9,7 @@ factory = Transform{
 	scale = ScaleFrom.inches,
 	Model("basicfactory.ive")
 }
-RelativeTo.World:addChild(factory)
+--RelativeTo.World:addChild(factory)
 
 ss = RelativeTo.World:getOrCreateStateSet()
 RelativeTo.World:addChild(Sphere{radius=.23, position = {0,3,-5}})
