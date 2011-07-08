@@ -23,27 +23,26 @@ hole = Transform{
 PAT = Transform{
 	position = {0,1,0},
 }
+
+
 obj1 = osg.MatrixTransform()
 obj1:addChild(hole)
 obj2 = osg.MatrixTransform()
 obj2:addChild(peg)
-TM = osg.MatrixTransform()
-TM:addChild(PAT)
-PAT:addChild(obj2)
+
 
 RelativeTo.World:addChild(obj1)
-RelativeTo.World:addChild(TM)
+RelativeTo.World:addChild(obj2)
 
 rotateBlock = function()
 	local r = Rotation.rotate(obj1,"z",-45,45)
 	r()
-	obj1_preMatrix = obj1:getMatrix()
-
-	TM:preMult(obj1_preMatrix)
+	obj2:preMult(obj1:getMatrix())
 	Actions.waitForRedraw()
 end
-
+print(peg:getPosition():y())
 Actions.addFrameAction(rotateBlock)
+print(peg:getPosition():y())
 
 
 
