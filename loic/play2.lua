@@ -14,7 +14,7 @@ factory = Transform{
 }
 
 peg = Transform{
-	position = {0,1,0},
+	position = {2,1,0},
 	Model("Pin.osg"),
 }
 hole = Transform{
@@ -30,24 +30,28 @@ obj2:addChild(peg)
 
 RelativeTo.World:addChild(obj1)
 RelativeTo.World:addChild(obj2)
-
-rotateBlock = function()
-	local r = Rotation.rotate(obj1,"z",-45,45)
-	r()
-	obj2:preMult(obj1:getMatrix())
-	Actions.waitForRedraw()
+move_peg = function()
+	local t = Transformation.move_slow(peg,.3,-2,0,0)
+	t()
 end
 
-trans = osg.Vec3d()
-rot = osg.Quat()
-scale = osg.Vec3d()
-so = osg.Quat()
-obj2:getMatrix():decompose(trans,rot,scale,so)
-
-print(trans:x())
-Actions.addFrameAction(rotateBlock)
-obj2:getMatrix():decompose(trans,rot,scale,so)
-print(trans:x())
+prox = function()
+	desired = hole:getPosition()
+	dx = desired:x()
+	dz = desired:z()
+	while true do
+		actual = peg:getPosition()
+		ax = actual:x()
+		az = actual:z()
+		if (math.abs(math.abs(dx)-math.abs(ax)) < .5) and (math.abs(math.abs(dz)-math.abs(az)) < .5) then
+			print "peg within threshold distance"
+			break
+		end
+		Actions.waitForRedraw()
+	end
+end
+Actions.addFrameAction(prox)
+Actions.addFrameAction(move_peg)
 
 
 
