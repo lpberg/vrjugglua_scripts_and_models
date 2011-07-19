@@ -9,13 +9,13 @@ factory = Transform{
 	scale = ScaleFrom.inches,
 	Model("basicfactory.ive")
 }
-RelativeTo.World:addChild(factory)
+--RelativeTo.World:addChild(factory)
 
 robot = Transform{
 	position = {0,1,-2},
 	Model("Robot Bottom.osg"),
 }
-RelativeTo.World:addChild(robot)
+--RelativeTo.World:addChild(robot)
 
 ss = RelativeTo.World:getOrCreateStateSet()
 --RelativeTo.World:addChild(Sphere{radius=.23, position = {0,3,-5}})
