@@ -11,6 +11,12 @@ factory = Transform{
 }
 RelativeTo.World:addChild(factory)
 
+robot = Transform{
+	position = {0,1,-2},
+	Model("Robot Bottom.osg"),
+}
+RelativeTo.World:addChild(robot)
+
 ss = RelativeTo.World:getOrCreateStateSet()
 --RelativeTo.World:addChild(Sphere{radius=.23, position = {0,3,-5}})
 --RelativeTo.World:addChild(Sphere{radius=.23, position = {1.5,2,-6}})
@@ -26,14 +32,14 @@ function doLight1()
 		ls1
 	)
 
-	l1:setPosition(osg.Vec4(0, 3, -5, 1))
+	l1:setPosition(osg.Vec4(0, 3, -5, 1.0))
 end
 -- doLight1()
 function doLight1_5()
 
 	l3 = osg.Light()
 	l3:setLightNum(3)
-	l3:setAmbient(osg.Vec4(.5, .5, .6, 1.0))
+	l3:setAmbient(osg.Vec4(.2, .2, .3, 1.0))
 	
 	ls3 = osg.LightSource()
 	ls3:setLight(l3)
@@ -44,7 +50,7 @@ function doLight1_5()
 	RelativeTo.Room:addChild(
 		ls3
 	)
-	l3:setPosition(osg.Vec4(0.0, 0.0, 1.25, 1.0))
+	l3:setPosition(osg.Vec4(-1.0, 0.0, 1.25, 1.0))
 end
 function doLight2()
 
@@ -66,4 +72,4 @@ end
 
 doLight1()
 doLight2()
-doLight1_5()
+--doLight1_5()
