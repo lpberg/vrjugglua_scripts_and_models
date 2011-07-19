@@ -1,4 +1,6 @@
 -- Look for models in the same directory as this file.
+require("DebugAxes")
+DebugAxes.show()
 require("Actions")
 require("getScriptFilename")
 fn = getScriptFilename()
@@ -13,41 +15,52 @@ factory = Transform{
 	Model("basicfactory.ive")
 }
 
-peg = Transform{
-	position = {0,1,0},
-	Model("Pin.osg"),
-}
-hole = Transform{
-	Model("Block.osg"),
-}
-
-
 obj1 = osg.MatrixTransform()
-obj1:addChild(hole)
+obj1:addChild(Model("Pin.osg"))
+obj1:addChild(DebugAxes.node)
+
 obj2 = osg.MatrixTransform()
-obj2:addChild(peg)
+obj2:addChild(Model("Block.osg"))
+obj2:addChild(DebugAxes.node)
 
 
 RelativeTo.World:addChild(obj1)
 RelativeTo.World:addChild(obj2)
 
-rotateBlock = function()
-	local r = Rotation.rotate(obj1,"z",-45,45)
-	r()
-	obj2:preMult(obj1:getMatrix())
-	Actions.waitForRedraw()
+
+updatePoint = function()
+	obj1:preMult(obj2:getMatrix())
 end
 
-trans = osg.Vec3d()
-rot = osg.Quat()
-scale = osg.Vec3d()
-so = osg.Quat()
-obj2:getMatrix():decompose(trans,rot,scale,so)
+rotateBlock = function()
+	local r = Rotation.rotate(obj2,"z",-45,20)
+	r()
+	Actions.waitForRedraw()
+	updatePoint()
+	-- new = obj2:getMatrix()
+	-- new:setTrans(osg.Vec3d(0,1,0))
+	-- obj1:setMatrix(new)
+	
 
-print(trans:x())
+	
+end
+
+
+
 Actions.addFrameAction(rotateBlock)
-obj2:getMatrix():decompose(trans,rot,scale,so)
-print(trans:x())
+
+point1 = obj1:getMatrix()
+point2 = obj2:getMatrix()
+
+
+print(point1:getTrans():x())
+print(point1:getTrans():y())
+print(point1:getTrans():z())
+print(point2:getTrans():x())
+print(point2:getTrans():y())
+print(point2:getTrans():z())
+
+
 
 
 

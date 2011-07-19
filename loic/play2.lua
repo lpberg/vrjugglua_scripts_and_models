@@ -7,6 +7,22 @@ dofile(vrjLua.findInModelSearchPath("../examples/lys/simpleLights.lua"))
 dofile(vrjLua.findInModelSearchPath("../examples/movetools.lua"))
 vrjLua.appendToModelSearchPath(vrjLua.findInModelSearchPath("../models/"))
 
+
+function makeTransparent(node, alpha)
+	local state = node:getOrCreateStateSet()
+	state:setRenderingHint(2) -- transparent bin
+
+	local CONSTANT_ALPHA = 0x8003
+	local ONE_MINUS_CONSTANT_ALPHA = 0x8004
+	local bf = osg.BlendFunc()
+	bf:setFunction(CONSTANT_ALPHA, ONE_MINUS_CONSTANT_ALPHA)
+	state:setAttributeAndModes(bf)
+
+	local bc = osg.BlendColor(osg.Vec4(1.0, 1.0, 1.0, alpha or 0.5))
+	state:setAttributeAndModes(bc)
+	node:setStateSet(state)
+end
+
 factory = Transform{
 	orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
 	scale = ScaleFrom.inches,
@@ -20,6 +36,11 @@ peg = Transform{
 hole = Transform{
 	Model("Block.osg"),
 }
+planes = Transform{
+	position = {0,.5,0},
+	Model("Planes.osg"),
+}
+makeTransparent(planes,.7)
 
 
 obj1 = osg.MatrixTransform()
@@ -44,7 +65,7 @@ prox = function()
 		ax = actual:x()
 		az = actual:z()
 		if (math.abs(math.abs(dx)-math.abs(ax)) < .5) and (math.abs(math.abs(dz)-math.abs(az)) < .5) then
-			print "peg within threshold distance"
+			RelativeTo.World:addChild(planes)
 			break
 		end
 		Actions.waitForRedraw()
@@ -52,8 +73,5 @@ prox = function()
 end
 Actions.addFrameAction(prox)
 Actions.addFrameAction(move_peg)
-
-
-
 
 
