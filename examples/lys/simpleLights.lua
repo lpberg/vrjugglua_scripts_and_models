@@ -9,7 +9,7 @@ factory = Transform{
 	scale = ScaleFrom.inches,
 	Model("basicfactory.ive")
 }
---RelativeTo.World:addChild(factory)
+RelativeTo.World:addChild(factory)
 
 ss = RelativeTo.World:getOrCreateStateSet()
 --RelativeTo.World:addChild(Sphere{radius=.23, position = {0,3,-5}})
@@ -50,7 +50,7 @@ function doLight2()
 
 	l2 = osg.Light()
 	l2:setLightNum(1)
-	l2:setAmbient(osg.Vec4(.8, .8, 0.6, 1.0))
+	l2:setAmbient(osg.Vec4(.8, .8, 0.6, .50))
 	
 	ls2 = osg.LightSource()
 	ls2:setLight(l2)
