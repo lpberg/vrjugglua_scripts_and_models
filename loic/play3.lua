@@ -1,3 +1,4 @@
+do
 -- Look for models in the same directory as this file.
 require("Actions")
 require("getScriptFilename")
@@ -6,20 +7,20 @@ vrjLua.appendToModelSearchPath(fn)
 dofile(vrjLua.findInModelSearchPath("../examples/lys/simpleLights.lua"))
 dofile(vrjLua.findInModelSearchPath("../examples/movetools.lua"))
 vrjLua.appendToModelSearchPath(vrjLua.findInModelSearchPath("../models/"))
-
+end
 factory = Transform{
 	orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
 	scale = ScaleFrom.inches,
 	Model("basicfactory.ive")
 }
 
-peg = Transform{
-	position = {2,1,0},
-	Model("Pin.osg"),
-}
-hole = Transform{
-	Model("Block.osg"),
-}
+-- peg = Transform{
+	-- position = {2,1,0},
+	-- Model("Pin.osg"),
+-- }
+-- hole = Transform{
+	-- Model("Block.osg"),
+-- }
 
 
 obj1 = osg.MatrixTransform()
