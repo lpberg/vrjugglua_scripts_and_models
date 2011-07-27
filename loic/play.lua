@@ -27,42 +27,32 @@ obj2:addChild(DebugAxes.node)
 RelativeTo.World:addChild(obj1)
 RelativeTo.World:addChild(obj2)
 
+--moving the peg above the hole
+newM = osg.Matrixd()
+newM:setTrans(osg.Vec3d(0,1,0))
+obj1:setMatrix(newM)
+
+-- pTh = pTw 				 *     inverse(hTw)
+pTh = obj1:getMatrix()*osg.Matrixd.inverse(obj2:getMatrix())
 
 updatePoint = function()
-	obj1:preMult(obj2:getMatrix())
-	
+	obj1:setMatrix(pTh*obj2:getMatrix())
 end
 
 rotateBlock = function()
-	--local r = Rotation.rotate(obj2,"z",-45,20)
-	-- local t = Transformation.move_slow(wrapper,.3,-2,0,0)
-	-- r()
-	newM = obj2:getMatrix()
-	newM:setTrans(osg.Vec3d(-1,0,0))
-	obj2:setMatrix(newM)
-	Actions.waitForRedraw()
-	Actions.waitSeconds(2)
-	updatePoint()
-	-- new = obj2:getMatrix()
-	-- new:setTrans(osg.Vec3d(0,1,0))
-	-- obj1:setMatrix(new)
+	while true do
+		local r = Rotation.rotate(obj2,"z",math.random(90),40)
+		r()
+		Actions.waitForRedraw()
+		Actions.waitSeconds(1)
+		updatePoint()
+		Actions.waitSeconds(1)
+	end
 end
-
-
 
 Actions.addFrameAction(rotateBlock)
 
-point1 = obj1:getMatrix()
-point2 = obj2:getMatrix()
 
-print("point 1")
-print(point1:getTrans():x())
-print(point1:getTrans():y())
-print(point1:getTrans():z())
-print("point 2")
-print(point2:getTrans():x())
-print(point2:getTrans():y())
-print(point2:getTrans():z())
 
 
 
