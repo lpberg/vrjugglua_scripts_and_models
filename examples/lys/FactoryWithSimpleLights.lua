@@ -39,7 +39,7 @@ function doLight1_5()
 
 	l3 = osg.Light()
 	l3:setLightNum(3)
-	l3:setAmbient(osg.Vec4(.2, .2, .3, 1.0))
+	l3:setAmbient(osg.Vec4(.8, .8, .3, 1.0))
 	
 	ls3 = osg.LightSource()
 	ls3:setLight(l3)
@@ -67,7 +67,7 @@ function doLight2()
 	RelativeTo.Room:addChild(
 		ls2
 	)
-	l2:setPosition(osg.Vec4(1.5, 2, 0, 1.0))
+	l2:setPosition(osg.Vec4(1.5, 2, 2, 1.0))
 end
 
 doLight1()

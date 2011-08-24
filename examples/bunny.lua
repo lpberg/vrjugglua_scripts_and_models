@@ -1,11 +1,12 @@
-require("Actions")
-dofile("X:/users/lpberg/VRJuggLua/examples/movetools.lua")
+dofile("X:/users/lpberg/VRJuggLua/examples/lys/FactoryWithSimpleLights.lua")
+show = function(model_name)
+	RelativeTo.World:addChild(model)
+end
 
-xform = Transform{scale=.1,orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),position={1,0,0}}
-bunny = Model("X:/Users/lpberg/VRJuggLua/models/bunny.osg")
-xform:addChild(bunny)
+model_name = Transform{
+	scale=1,
+	orientation = AngleAxis(Degrees(0), Axis{1.0, 0.0, 0.0}),
+	position={0,0,0}
+}
 
-RelativeTo.World:addChild(xform)
 
-Actions.addFrameAction(Transformation.oscillateY(xform,.5,0,1))
-Actions.addFrameAction(Transformation.oscillateX(xform,2,-3,1.6))
