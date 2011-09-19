@@ -3,8 +3,19 @@
 -- nav-testbed-launcher script.
 
 require("Actions")
+--[ basing code off :http://lists.openscenegraph.org/pipermail/osg-users-openscenegraph.org/2011-June/052162.html
 
-sphereRadius = 0.025
+gnode = osg.Geode()
+geom = osg.Geometry()
+gnode:addDrawable(geo)
+RelativeTo.World:addChild(gnode)
+drawArrayLines = osg.DrawArrays(4) -- 4 is enum for linestrip
+vertexData = osg.Vec3dArray()
+geom:addPrimitiveSet(drawArrayLines)
+geom:addVertexData(vertexData)
+
+
+
 
 
 local xform = osg.MatrixTransform()
