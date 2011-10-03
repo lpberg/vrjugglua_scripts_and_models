@@ -1,60 +1,61 @@
 require("Actions")
-sphereRadius = 0.25
 device = gadget.PositionInterface("VJWand")
 
-local xform = osg.MatrixTransform()
-RelativeTo.Room:addChild(xform)
+local wandTip = osg.MatrixTransform()
+RelativeTo.Room:addChild(wandTip)
 
-group1 = Group{sphere,}
+group = osg.Group()
+wandTip:addChild(group)
 
-xform:addChild(group1)
+s = Transform{Sphere{radius=.05}}
+s2 = Transform{Sphere{radius=.1}}
+s3 = Transform{Sphere{radius=.15}}
 
-object_table = {
-		[0] = Sphere{radius = sphereRadius,position = {0, 0, 0},},
-		[1] = Sphere{radius = sphereRadius/2,position = {0, 0, 0},},
-		[2] = Sphere{radius = sphereRadius/3,position = {0, 0, 0},},
-}
+getNextObject = coroutine.wrap(function()
+	while true do
+		coroutine.yield(s)
+		coroutine.yield(s2)
+		coroutine.yield(s3)
+	end
+end)
 
-currentObject = object_table[0]
+currentObject = getNextObject()
+
 Actions.addFrameAction(
 	function()
-		local i = 0
-		nextObj = function()
-			i = i + 1
-			currentObject = object_table[math.fmod(i,table.getn(object_table)+1)]
-			return currentObject
-		end
-		local drawBtn = gadget.DigitalInterface("VJButton1")
+		local drawBtn = gadget.DigitalInterface("VJButton2")
 		while true do
 			repeat
 				Actions.waitForRedraw()
 			until drawBtn.justPressed
-			group1:removeChild(currentObject)
-			group1:addChild(nextObj())
-		end
-	end
-)
-Actions.addFrameAction(
-	function()
-		local drawBtn2 = gadget.DigitalInterface("VJButton2")
-		while true do
-			repeat
-				Actions.waitForRedraw()
-			until drawBtn2.justPressed
-			pos = device.position
-			newXform = nil
-			newXform = Transform {position = {pos:x(),pos:y(),pos:z()},}
-			newXform:addChild(currentObject)
-			RelativeTo.World:addChild(newXform)
+			group:removeChild(currentObject)
+			print("objecta removed")
+			group:addChild(getNextObject())
 			Actions.waitForRedraw()
 		end
 	end
 )
+
+-- Actions.addFrameAction(
+	-- function()
+		-- local drawBtn2 = gadget.DigitalInterface("VJButton2")
+		-- while true do
+			-- repeat
+				-- Actions.waitForRedraw()
+			-- until drawBtn2.justPressed
+			-- local pos = device.position - osgnav.position
+			-- newXform = Transform {position = {pos:x(),pos:y(),pos:z()},}
+			-- newXform:addChild(currentObject)
+			-- RelativeTo.World:addChild(newXform)
+			-- Actions.waitForRedraw()
+		-- end
+	-- end
+-- )
 	
 Actions.addFrameAction(
 	function()
 		while true do
-			xform:setMatrix(device.matrix)
+			wandTip:setMatrix(device.matrix)
 			Actions.waitForRedraw()
 		end
 	end
