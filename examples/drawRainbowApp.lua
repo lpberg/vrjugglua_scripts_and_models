@@ -2,7 +2,7 @@
 
 require("Actions")
 
-drawNewLine = function(lineWidth)
+function drawNewLine(lineWidth)
 	local geom = osg.Geometry()
 	local geode = osg.Geode()
 	geode:addDrawable(geom)
@@ -20,12 +20,11 @@ drawNewLine = function(lineWidth)
 	stateRoot:setAttribute(lw)
 	return vertices,colors,linestrip,geom
 end
-	
+
 Actions.addFrameAction(
 	function()
 		local drawBtn = gadget.DigitalInterface("VJButton2")
 		local device = gadget.PositionInterface("VJWand")
-		
 		getColor = coroutine.wrap(function()
 			while true do
 				coroutine.yield(osg.Vec4(1, 0, 0, 1))
@@ -33,25 +32,28 @@ Actions.addFrameAction(
 				coroutine.yield(osg.Vec4(0, 0, 1, 1))
 			end
 		end)
-		
-		function addPoint(v,vertices,colors,linestrip,geom)
+
+
+		function addPoint(v, vertices, colors, linestrip, geom)
 			vertices.Item:insert(v)
 			colors.Item:insert(getColor())
 			linestrip:setCount(#(vertices.Item))
 			geom:setVertexArray(vertices)
 		end
-		
+
 		while true do
 			repeat
 				Actions.waitForRedraw()
 			until drawBtn.justPressed
-				local width = 10 --math.random(5,20)
-				local verticies, colors, linestrip, geom = drawNewLine(width)
-			repeat
+
+			local width = 10 --math.random(5,20)
+			local vertices, colors, linestrip, geom = drawNewLine(width)
+
+			while drawBtn.pressed do
 				local pos = device.position
-				addPoint(osg.Vec3(pos:x(),pos:y(),pos:z()),verticies,colors,linestrip,geom)
+				addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 				Actions.waitForRedraw()
-			until not(drawBtn.pressed)
+			end
 		end
 	end
 )
