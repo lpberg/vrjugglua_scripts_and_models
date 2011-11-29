@@ -20,12 +20,16 @@ robot2 = Transform{
 RelativeTo.World:addChild(robot1)
 RelativeTo.World:addChild(robot2)
 
-function drawNewLine(lineWidth,drawXform)
+function drawNewLine(lineWidth,xform)
+	if not xform then
+		xform = Transform{}
+		RelativeTo.World:addChild(xform)
+	end
 	local geom = osg.Geometry()
 	geom:setUseDisplayList(false)
 	local geode = osg.Geode()
 	geode:addDrawable(geom)
-	drawXform:addChild(geode)
+	xform:addChild(geode)
 	local vertices = osg.Vec3Array()
 	geom:setVertexArray(vertices)
 	local colors = osg.Vec4Array()
@@ -37,7 +41,7 @@ function drawNewLine(lineWidth,drawXform)
 	local stateRoot = geom:getOrCreateStateSet()
 	local lw = osg.LineWidth(lineWidth)
 	stateRoot:setAttribute(lw)
-	return vertices,colors,linestrip,geom
+	return vertices,colors,linestrip,geom,xform
 end
 
 getColor = coroutine.wrap(function()
@@ -55,17 +59,17 @@ function addPoint(v, vertices, colors, linestrip, geom)
 end
 
 local device = gadget.PositionInterface("VJWand")
-roboFunc = function(robot,drawXform)
+roboFunc = function(robot,xform)
 	local f = function()
 		while true do
 			local width = 5 --math.random(5,20)
-			local vertices, colors, linestrip, geom = drawNewLine(width,drawXform)
+			local vertices, colors, linestrip, geom, xform = drawNewLine(width,xform)
 			local pos = device.position - osgnav.position
 			local robopos = robot:getPosition()
 			addPoint(osg.Vec3(robopos:x()+.05,robopos:y()+.69,robopos:z()+.3), vertices, colors, linestrip, geom)
 			addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 			Actions.waitForRedraw()
-			drawXform:removeChildren(0,drawXform:getNumChildren())
+			xform:removeChildren(0,xform:getNumChildren())
 			--OK, that line has been finalized, we can use display lists now.
 			geom:setUseDisplayList(true)
 		end
@@ -76,7 +80,6 @@ Actions.addFrameAction(roboFunc(robot1,drawXform))
 Actions.addFrameAction(roboFunc(robot1,drawXform))
 Actions.addFrameAction(roboFunc(robot2,drawXform2))
 Actions.addFrameAction(roboFunc(robot2,drawXform2))
---Actions.addFrameAction(s(robot2))
 
 
 
