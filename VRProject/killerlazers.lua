@@ -1,14 +1,26 @@
 require("Actions")
+require("getScriptFilename")
+vrjLua.appendToModelSearchPath(getScriptFilename())
 drawXform = Transform{}
 RelativeTo.World:addChild(drawXform)
+drawXform2 = Transform{}
+RelativeTo.World:addChild(drawXform2)
 local device = gadget.PositionInterface("VJWand")
-robot = Transform{
 
-	Model([[C:\Users\lpberg\Desktop\t.ive]])
+robot1 = Transform{
+	position = {0,0,-2},
+	orientation = AngleAxis(Degrees(180), Axis{0.0, 1.0, 0.0}),
+	Model([[\models\t.ive]])
 }
-RelativeTo.World:addChild(robot)
+robot2 = Transform{
+	position = {1,0,-2},
+	orientation = AngleAxis(Degrees(180), Axis{0.0, 1.0, 0.0}),
+	Model([[\models\t.ive]])
+}
+RelativeTo.World:addChild(robot1)
+RelativeTo.World:addChild(robot2)
 
-function drawNewLine(lineWidth)
+function drawNewLine(lineWidth,drawXform)
 	local geom = osg.Geometry()
 	geom:setUseDisplayList(false)
 	local geode = osg.Geode()
@@ -36,27 +48,21 @@ end)
 
 
 function addPoint(v, vertices, colors, linestrip, geom)
-	print(help(vertices))
 	vertices.Item:insert(v)
 	colors.Item:insert(getColor())
 	linestrip:setCount(#(vertices.Item))
 	geom:setVertexArray(vertices)
 end
 
-Actions.addFrameAction(
-	function()
-		--local drawBtn = gadget.DigitalInterface("VJButton0")
-		local device = gadget.PositionInterface("VJWand")
-
+local device = gadget.PositionInterface("VJWand")
+roboFunc = function(robot,drawXform)
+	local f = function()
 		while true do
-
-			local width = 10 --math.random(5,20)
-			local vertices, colors, linestrip, geom = drawNewLine(width)
-
-			
+			local width = 5 --math.random(5,20)
+			local vertices, colors, linestrip, geom = drawNewLine(width,drawXform)
 			local pos = device.position - osgnav.position
 			local robopos = robot:getPosition()
-			addPoint(osg.Vec3(robopos:x(),robopos:y()+.5,robopos:z()), vertices, colors, linestrip, geom)
+			addPoint(osg.Vec3(robopos:x()+.05,robopos:y()+.69,robopos:z()+.3), vertices, colors, linestrip, geom)
 			addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 			Actions.waitForRedraw()
 			drawXform:removeChildren(0,drawXform:getNumChildren())
@@ -64,7 +70,15 @@ Actions.addFrameAction(
 			geom:setUseDisplayList(true)
 		end
 	end
-)
+	return f
+end
+Actions.addFrameAction(roboFunc(robot1,drawXform))
+Actions.addFrameAction(roboFunc(robot1,drawXform))
+Actions.addFrameAction(roboFunc(robot2,drawXform2))
+Actions.addFrameAction(roboFunc(robot2,drawXform2))
+--Actions.addFrameAction(s(robot2))
+
+
 
 	
 		
