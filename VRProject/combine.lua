@@ -1,4 +1,5 @@
 require("Actions")
+require("DebugAxes")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 --include for rotation functions
@@ -13,24 +14,33 @@ RelativeTo.World:addChild(drawXform2)
 --head device for core animation
 head = gadget.PositionInterface("VJHead")
 device = gadget.PositionInterface("VJWand")
-distFromHead = 2
+distFromHead = 3
+--set up lighting
+snx.changeAPI("OpenAL")
+i = snx.SoundInfo()
+i.filename = vrjLua.findInModelSearchPath("finalsound.wav")
+i.ambient = false
+s = snx.SoundHandle(i.filename)
+s:configure(i)
+--s:trigger(1) -- TODO
+offset = Vec(-2, -1.5, -1.5)
 
 turnLightingOffForNode = function(node)
 	stateSet = node:getOrCreateStateSet()
 	stateSet:setMode(0x0B50,osg.StateAttribute.Values.OFF)
 end
 	
-
 portalGun1 = osg.MatrixTransform()
 portalGun2 = Transform{
 	orientation = AngleAxis(Degrees(180), Axis{0.0, 1.0, 0.0}),
-	Model([[\models\Portalgun.ive]])
+	Model([[\models\Portalgun.ive]]),
+	scale = .66,
 }
 portalGun1:addChild(portalGun2)
 turnLightingOffForNode(portalGun2)
 
 cake =  Transform{
-	position = {3.2,.75,1},
+	position = {3.2,.75,.95},
 	--orientation = AngleAxis(Degrees(-20), Axis{0.0, 1.0, 0.0}),
 	Model([[\models\cake.ive]])
 }
@@ -49,7 +59,6 @@ cube1 = Transform{
 	Model([[\models\cube.ive]])
 }
 
-
 cube2 = Transform{
 	scale = 2,
 	position = {0,0,-.5},
@@ -63,7 +72,6 @@ cube3 = Transform{
 	orientation = AngleAxis(Degrees(120), Axis{0.0, 1.0, 0.0}),
 	Model([[\models\Companion Cube.ive]])
 }
-
 
 robot1 = Transform{
 	position = {1,1,-3},
@@ -82,7 +90,6 @@ tronfloor = Transform{
 }
 
 
-
 core = Transform{
 	scale = .1,
 	position = {-1.85,-.93,.35-distFromHead},
@@ -90,26 +97,35 @@ core = Transform{
 }
 turnLightingOffForNode(core)
 
+
+--xform for core rotation
 rotCore = Transform{
 	core,
 }
-
+--keeps the protalGun at the wand while navigating
 gunFunc = function()
 	while true do
-		portalGun1:setMatrix(device.matrix)--(device.position-osgnav.position)
+		newM = osg.Matrixd()
+		newM:setRotate(device.matrix:getRotate())
+		newM:setTrans(device.position-osgnav.position)
+		portalGun1:setMatrix(newM)
 		Actions.waitForRedraw()
 	end
 end
 
-followWand = function()
-	Actions.addFrameAction(Rotation.createRotation(rotCore,"y",25))
+--calls for a rot animation on the rotCore xform, then sets the position about the users head
+followHead = function()
+	Actions.addFrameAction(Rotation.createRotation(rotCore,"y",45))
 	while true do
-		pos = head.position -- osgnav.position
-		rotCore:setPosition(osg.Vec3d(pos:x(),pos:y(),pos:z()))
+		pos = head.position-osgnav.position
+		rotCore:setPosition(pos)
+		newM = osg.Matrixd(rotCore:getAttitude())
+		corepos = core:getPosition()*newM
+		s:setPosition(corepos:x(), corepos:y(), corepos:z())
 		Actions.waitForRedraw()
 	end
 end
-
+		
 function drawNewLine(lineWidth,xform)
 	if not xform then
 		xform = Transform{}
@@ -133,14 +149,11 @@ function drawNewLine(lineWidth,xform)
 	stateRoot:setAttribute(lw)
 	return vertices,colors,linestrip,geom,xform
 end
-
 getColor = coroutine.wrap(function()
 	while true do
 		coroutine.yield(osg.Vec4(1, 0, 0, 1))
 	end
 end)
-
-
 function addPoint(v, vertices, colors, linestrip, geom)
 	vertices.Item:insert(v)
 	colors.Item:insert(getColor())
@@ -148,9 +161,10 @@ function addPoint(v, vertices, colors, linestrip, geom)
 	geom:setVertexArray(vertices)
 end
 
+--enable lasers if user is 1.5m in scene
 laserProx = function()
 	while true do
-		if head.position:z() < .5 then
+		if head.position:z() < 1.5 then
 			lasersON = true
 			Actions.waitForRedraw()
 		else
@@ -160,6 +174,7 @@ laserProx = function()
 	end
 end
 
+-- animation for targeting lasers based on laserON bool value
 roboFunc = function(robot,xform)
 	local f = function()
 		while true do
@@ -167,10 +182,10 @@ roboFunc = function(robot,xform)
 				local width = 3
 				local vertices, colors, linestrip, geom, xform = drawNewLine(width,xform)
 				--local pos = device.position - osgnav.position
-				local pos = head.position
+				local pos = head.position-osgnav.position
 				local robopos = robot:getPosition()
-				addPoint(osg.Vec3(robopos:x()+.05,robopos:y()+.69,robopos:z()+.3), vertices, colors, linestrip, geom)
-				addPoint(osg.Vec3(pos:x(), pos:y()-1, pos:z()), vertices, colors, linestrip, geom)
+				addPoint(osg.Vec3(robopos:x()+.03,robopos:y()+.69,robopos:z()+.2), vertices, colors, linestrip, geom)
+				addPoint(osg.Vec3(pos:x(), pos:y()-.4, pos:z()+.05), vertices, colors, linestrip, geom)
 				Actions.waitForRedraw()
 				xform:removeChildren(0,xform:getNumChildren())
 				--OK, that line has been finalized, we can use display lists now.
@@ -183,13 +198,16 @@ roboFunc = function(robot,xform)
 	return f
 end
 
+--frame actions
 Actions.addFrameAction(roboFunc(robot1,drawXform))
 Actions.addFrameAction(roboFunc(robot1,drawXform))
 Actions.addFrameAction(roboFunc(robot2,drawXform2))
 Actions.addFrameAction(roboFunc(robot2,drawXform2))
-Actions.addFrameAction(followWand)
+Actions.addFrameAction(followHead)
 Actions.addFrameAction(laserProx)
 Actions.addFrameAction(gunFunc)
+
+--adding nodes / children to root
 RelativeTo.World:addChild(robot1)
 RelativeTo.World:addChild(robot2)
 RelativeTo.World:addChild(tronfloor)
@@ -200,4 +218,4 @@ RelativeTo.World:addChild(cube3)
 RelativeTo.World:addChild(portalGun1)
 RelativeTo.World:addChild(tronfloor)
 RelativeTo.World:addChild(chamber)
-
+RelativeTo.World:addChild(cake)
