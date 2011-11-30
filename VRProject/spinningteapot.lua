@@ -1,18 +1,39 @@
-require("DebugAxes")
-require("StockModels")
 require("Actions")
-dofile([[C:\Users\lpberg\Dropbox\Vance_Research\VRJuggLua\examples\older\movetools.lua]])
+require("getScriptFilename")
+vrjLua.appendToModelSearchPath(getScriptFilename())
+dofile(vrjLua.findInModelSearchPath([[movetools.lua]]))
+dofile(vrjLua.findInModelSearchPath([[simpleLights.lua]]))
+head = gadget.PositionInterface("VJHead")
+distFromHead = 1
 
-s = 5
 
 
-sbox = Transform{
-	Transform{
-	position = {10,0,0},
-	--Sphere{radius=.23},
-	Model([[C:\Users\lpberg\Desktop\core.ive]])
-	--StockModels.Teapot(),
-	}
+tronfloor = Transform{
+	position = {.5,0,.5},
+	Model([[\models\tron sketchy physics[1]~.osg]]),
 }
-RelativeTo.World:addChild(sbox)
-Actions.addFrameAction(Rotation.createRotation(sbox,"y",25))
+RelativeTo.World:addChild(tronfloor)
+
+core = Transform{
+	scale = .1,
+	position = {-1.85,-.93,.35-distFromHead},
+	Model([[\models\core.ive]])
+}
+coress = core:getOrCreateStateSet()
+coress:setMode(0x0B50,osg.StateAttribute.Values.OFF)
+rotCore = Transform{
+	core,
+}
+
+followWand = function()
+	Actions.addFrameAction(Rotation.createRotation(rotCore,"y",25))
+	while true do
+		pos = head.position -- osgnav.position
+		rotCore:setPosition(osg.Vec3d(pos:x(),pos:y(),pos:z()))
+		Actions.waitForRedraw()
+	end
+end
+
+Actions.addFrameAction(followWand)
+RelativeTo.World:addChild(tronfloor)
+RelativeTo.World:addChild(rotCore)
