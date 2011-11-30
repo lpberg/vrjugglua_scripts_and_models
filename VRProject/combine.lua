@@ -15,14 +15,40 @@ head = gadget.PositionInterface("VJHead")
 device = gadget.PositionInterface("VJWand")
 distFromHead = 2
 
+turnLightingOffForNode = function(node)
+	stateSet = node:getOrCreateStateSet()
+	stateSet:setMode(0x0B50,osg.StateAttribute.Values.OFF)
+end
+	
+
+portalGun1 = osg.MatrixTransform()
+portalGun2 = Transform{
+	orientation = AngleAxis(Degrees(180), Axis{0.0, 1.0, 0.0}),
+	Model([[\models\Portalgun.ive]])
+}
+portalGun1:addChild(portalGun2)
+turnLightingOffForNode(portalGun2)
+
+cake =  Transform{
+	position = {3.2,.75,1},
+	--orientation = AngleAxis(Degrees(-20), Axis{0.0, 1.0, 0.0}),
+	Model([[\models\cake.ive]])
+}
+
+chamber =  Transform{
+	scale = .6,
+	position = {8,0,-35},
+	orientation = AngleAxis(Degrees(-20), Axis{0.0, 1.0, 0.0}),
+	Model([[\models\chamberr.ive]])
+}
+--
 cube1 = Transform{
 	scale = 2,
 	position = {1,0,-3},
 	orientation = AngleAxis(Degrees(40), Axis{0.0, 1.0, 0.0}),
 	Model([[\models\cube.ive]])
 }
-coress = cube1:getOrCreateStateSet()
-coress:setMode(0x0B50,osg.StateAttribute.Values.OFF)
+
 
 cube2 = Transform{
 	scale = 2,
@@ -30,17 +56,14 @@ cube2 = Transform{
 	orientation = AngleAxis(Degrees(88), Axis{0.0, 1.0, 0.0}),
 	Model([[\models\cube.ive]])
 }
-coress = cube2:getOrCreateStateSet()
-coress:setMode(0x0B50,osg.StateAttribute.Values.OFF)
 
 cube3 = Transform{
-	scale = 2,
+	scale = .3,
 	position = {3.2,0,1},
 	orientation = AngleAxis(Degrees(120), Axis{0.0, 1.0, 0.0}),
-	Model([[\models\cube.ive]])
+	Model([[\models\Companion Cube.ive]])
 }
-coress = cube3:getOrCreateStateSet()
-coress:setMode(0x0B50,osg.StateAttribute.Values.OFF)
+
 
 robot1 = Transform{
 	position = {1,1,-3},
@@ -57,19 +80,26 @@ tronfloor = Transform{
 	position = {.5,0,.5},
 	Model([[\models\tron sketchy physics[1]~.osg]]),
 }
-RelativeTo.World:addChild(tronfloor)
+
+
 
 core = Transform{
 	scale = .1,
 	position = {-1.85,-.93,.35-distFromHead},
 	Model([[\models\core.ive]])
 }
-coress = core:getOrCreateStateSet()
-coress:setMode(0x0B50,osg.StateAttribute.Values.OFF)
+turnLightingOffForNode(core)
 
 rotCore = Transform{
 	core,
 }
+
+gunFunc = function()
+	while true do
+		portalGun1:setMatrix(device.matrix)--(device.position-osgnav.position)
+		Actions.waitForRedraw()
+	end
+end
 
 followWand = function()
 	Actions.addFrameAction(Rotation.createRotation(rotCore,"y",25))
@@ -159,6 +189,7 @@ Actions.addFrameAction(roboFunc(robot2,drawXform2))
 Actions.addFrameAction(roboFunc(robot2,drawXform2))
 Actions.addFrameAction(followWand)
 Actions.addFrameAction(laserProx)
+Actions.addFrameAction(gunFunc)
 RelativeTo.World:addChild(robot1)
 RelativeTo.World:addChild(robot2)
 RelativeTo.World:addChild(tronfloor)
@@ -166,4 +197,7 @@ RelativeTo.World:addChild(rotCore)
 RelativeTo.World:addChild(cube1)
 RelativeTo.World:addChild(cube2)
 RelativeTo.World:addChild(cube3)
+RelativeTo.World:addChild(portalGun1)
+RelativeTo.World:addChild(tronfloor)
+RelativeTo.World:addChild(chamber)
 
