@@ -63,6 +63,6 @@ function createLight2()
 end
 
 --calls to turn create lights lights (by extention turn them ON)
-createLight1()
-createLight2()
+-- createLight1()
+-- createLight2()
 
