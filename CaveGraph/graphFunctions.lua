@@ -49,6 +49,11 @@ function GraphMTindex:printCenter()
 	print("Y: " .. center:y())
 	print("Z: " .. center:z())
 end
+
+function GraphMTindex:getScale()
+	local ScaleVec = self.xform:getScale()
+	return ScaleVec:x()
+end
 function GraphMTindex:Scale(s)
 	local pointInit = self.xform:computeBound():center()
 	self.xform:setScale(osg.Vec3d(s,s,s))
