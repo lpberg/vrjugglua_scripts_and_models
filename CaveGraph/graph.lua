@@ -137,6 +137,19 @@ Actions.addFrameAction(function()
 		end
 	end
 end)
+left = {x = -1,y=-10,z=0}
+right = {x = 1,y=1,z=0}
+
+-- calculateRot = function(left,right)
+	-- local deltaX = left.x - right.x
+	-- local deltaY = left.y - right.y
+	-- local sign = (deltaY/math.abs(deltaY))
+	-- local forceFactor = 10
+	-- local force = math.abs(deltaY)*(1/math.abs(deltaX))*sign*forceFactor
+	-- return force
+-- end
+
+-- print(calculateRot(right,left))
 
 
 
