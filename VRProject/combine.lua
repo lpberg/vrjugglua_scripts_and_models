@@ -22,7 +22,7 @@ i.filename = vrjLua.findInModelSearchPath("finalsound.wav")
 i.ambient = false
 s = snx.SoundHandle(i.filename)
 s:configure(i)
---s:trigger(1) -- TODO
+s:trigger(1) -- TODO
 offset = Vec(-2, -1.5, -1.5)
 
 turnLightingOffForNode = function(node)
