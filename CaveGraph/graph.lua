@@ -18,14 +18,14 @@ hand = gadget.PositionInterface("VJHand")
 
 
 g = Graph()
-
+--Generate 20 random nodes
 for i = 1, 20, 1 do
 	local x = math.random(-5,5)
 	local y = math.random(-5,5)
 	local z = math.random(-5,5)
 	g:addNode(Node(osg.Vec3d(x,y,z),.125))
 end
-	
+--Generate 20 random edges
 for i = 1, 20, 1 do
 	local fromNode = math.random(19)
 	local toNode = math.random(19)
@@ -39,6 +39,7 @@ RelativeTo.World:addChild(g.xform)
 stateSet = g.xform:getOrCreateStateSet()
 stateSet:setMode(0x0B50,osg.StateAttribute.Values.OFF)
 
+--frame action to translate graph using button
 Actions.addFrameAction(function()
 	while true do
 		while not dragBtn.pressed do
