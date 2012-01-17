@@ -35,6 +35,33 @@ function GraphMTindex:addEdge(a,b)
 	addPoint(aPos, vertices, colors, linestrip, geom)
 	addPoint(bPos, vertices, colors, linestrip, geom)
 end
+Cylinder = function (a)
+	local pos = osg.Vec3(0.0, 0.0, 0.0)
+	if a.position then
+		pos:set(unpack(a.position))
+	end
+	local drbl = osg.ShapeDrawable(osg.Cylinder(pos, a.radius or 0.05, a.height or 1.0))
+	local geode = osg.Geode()
+	geode:addDrawable(drbl)
+	return geode
+end
+function GraphMTindex:addEdgeAsCylinder(a,b,radius)
+	print(help(a))
+	if not radius then radius = .10 end
+	aPos = osg.Vec3(a:getPosition():x(),a:getPosition():y(),a:getPosition():z())
+	bPos = osg.Vec3(b:getPosition():x(),b:getPosition():y(),b:getPosition():z())
+	mid = osg.Vec3((aPos:x()+bPos:x())/2,(aPos:y()+bPos:y())/2,(aPos:z()+bPos:z())/2)
+	
+	local edge = Transform{
+		position = {mid:x(),mid:y(),mid:z()},
+		Cylinder{height = (aPos-bPos):length()},
+	}
+	newVec = bPos - aPos
+	newQuat = osg.Quat()
+	newQuat:makeRotate(osg.Vec3(0,0,1),newVec)
+	edge:setAttitude(newQuat)	
+	self.xform:addChild(edge)
+end
 function GraphMTindex:getNode(index)
 	local child = self.xform:getChild(index)
 	return child
