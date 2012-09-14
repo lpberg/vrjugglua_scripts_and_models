@@ -6,7 +6,7 @@ Rotation = {
 		end
 		A[axis] = (degree/math.abs(degree))
 		local theAxis = Axis{A.x,A.y,A.z}
-		local dt = Actions.waitForRedraw()
+		-- local dt = Actions.waitForRedraw()
 		local function rotateAction()
 			local dt = Actions.waitForRedraw()
 			local angle = 0
@@ -74,6 +74,9 @@ end
 
 Transformation = {
 	move_slow = function(xform,rate,x,y,z)
+		if x == 0 and y == 0 and z == 0 then
+			return function() end
+		end
 		local f = function()
 			local pos = xform:getPosition()
 			local dt = Actions.waitForRedraw()

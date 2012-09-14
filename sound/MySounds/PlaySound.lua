@@ -34,3 +34,7 @@ PlayStarTrekProgramCompleteMessage = function()
 	my_sound = SoundWav(vrjLua.findInModelSearchPath("StarTrekSounds/Holodeck3ProgramComplete.wav"))
 	my_sound:trigger(1)
 end
+INeedMoreCowbell = function()
+	my_sound = SoundWav(vrjLua.findInModelSearchPath("cowbell.wav"))
+	my_sound:trigger(1)
+end
