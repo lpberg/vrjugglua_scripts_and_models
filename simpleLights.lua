@@ -1,7 +1,4 @@
--- require("getScriptFilename")
--- fn = getScriptFilename()
--- assert(fn, "Have to load this from file, not copy and paste, or we can't find our models!")
--- vrjLua.appendToModelSearchPath(fn)
+
 print("added lighting")
 
 ss = RelativeTo.World:getOrCreateStateSet()
