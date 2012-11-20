@@ -1,15 +1,10 @@
 require("Text")
-require("getScriptFilename")
-vrjLua.appendToModelSearchPath(getScriptFilename())
-function runfile(fn) dofile(vrjLua.findInModelSearchPath(fn)) end
-runfile([[simpleLightsMenu.lua]])
 
 --BEGIN MENU ITEM FUNCTIONS
 local MenuItemIndex = { isMenuItem = true}
 local MIMT = { __index = MenuItemIndex }
 
 function MenuItemIndex:TextLabel()
-	local vals = val -- fix for an issue with variables
 	texts = TextGeode{
 		tostring(self.label),
 		color = osg.Vec4(unpack(self.labelcolor)),
@@ -26,7 +21,7 @@ function MenuItemIndex:TextLabel()
 	end
 end
 
-Box = function(a)
+function MenuItemIndex:Box(a)
 	local pos = osg.Vec3(0.0, 0.0, 0.0)
 	if a.position then
 		pos:set(unpack(a.position))
@@ -43,31 +38,29 @@ Box = function(a)
 		pos = {0,0,0},
 		geode
 	}
-	ret_xform:setScale(Vec3(a.width,a.height,a.depth))
+	ret_xform:setScale(Vec(self.width,self.height,self.depth))
 	return ret_xform
 end
 
 function MenuItemIndex:createOSG()
-	
-	
 	self.switch_osg = osg.Switch()
 	self.textlabel_osg = self:TextLabel()
-	
+	local mycolor = {(0/255),(191/255),(255/255),1}
 	self.active_osg = Transform{
 		position = {0,0,self.depth},
-		Box{width = self.width, height = self.height, depth = self.depth, color = {1,1,0,0}},
+		self:Box{color = mycolor},
 		self.textlabel_osg
 		
 	}
+	local mycolor = {(30/255),(144/255),(255/255),1}
 	self.nonactive_osg = Transform{
 		position = {0,0,0},
-		Box{width = self.width, height = self.height, depth = self.depth, color = {1,0,1,0}},
+		self:Box{color = mycolor},
 		self.textlabel_osg
 	}
 	
 	self.switch_osg:addChild(self.active_osg)
 	self.switch_osg:addChild(self.nonactive_osg)
-	
 	--turn on non-active osg
 	self.switch_osg:setSingleChildOn(1)
 	
@@ -75,7 +68,7 @@ function MenuItemIndex:createOSG()
 end
 
 function MenuItemIndex:select()
-	print(self.label.." menu button pressed")
+	self.action()
 end
 
 function MenuItemIndex:dehighlight()
@@ -88,6 +81,7 @@ end
 
 MenuItem = function(item)
 	item.label = item.label or "None"
+	item.action = item.action or function() print(item.label.." button pressed") end
 	item.labelcolor = item.labelcolor or {1.0,1.0,1.0,1.0}
 	item.textpadding = item.textpadding or .9
 	item.depth = item.depth or .05
@@ -98,28 +92,31 @@ MenuItem = function(item)
 	return item
 end
 
--- s = MenuItem{label="Button1"}
--- RelativeTo.World:addChild(s.osg)
-
--- s2 = MenuItem{label="Button2",position={0,1,0}}
--- RelativeTo.World:addChild(s2.osg)
-
-
-
 --BEGIN MENU FUNCTIONS
 local MenuIndex = { isMenu = true}
 local MMT = { __index = MenuIndex }
+
 function MenuIndex:addButton(menu_item)
 	menu_item.osg:setPosition(Vec(0,self.nextOpenSpot,0))
-	self.nextOpenSpot = self.nextOpenSpot - menu_item.height*1.2 
-	self.osg:addChild(menu_item.osg)
+	self.nextOpenSpot = self.nextOpenSpot - menu_item.height*(1+self.buttonspacing)
+	self.switch:addChild(menu_item.osg)
 	table.insert(self.buttons,menu_item)
 end
 function MenuIndex:createMainOSG()
 	local nextOpenSpot = 0
-	self.osg = Transform{}
+	self.switch = osg.Switch()
+	self.osg = Transform{self.switch}
+	local ss = self.osg:getOrCreateStateSet()
+	ss:setMode(0x0B50, osg.StateAttribute.Values.OFF);
 end
 
+function MenuIndex:hide()
+	self.switch:setAllChildrenOff()
+end
+
+function MenuIndex:show()
+	self.switch:setAllChildrenOn()
+end
 function MenuIndex:highlightNext()
 	self.buttons[self.index]:dehighlight()
 	if self.index+1 == #self.buttons then
@@ -131,14 +128,12 @@ function MenuIndex:highlightNext()
 end
 
 function MenuIndex:highlightPrevious()
-	print("current idx"..self.index)
 	self.buttons[self.index]:dehighlight()
 	if self.index-1 == 0 then
 		self.index=#self.buttons
 	else
 		self.index = (self.index-1)%(#self.buttons)
 	end
-	print("next idx"..self.index)
 	self.buttons[self.index]:highlight()
 end
 
@@ -147,6 +142,7 @@ function MenuIndex:select()
 end
 
 Menu = function(menu)
+	menu.buttonspacing = menu.buttonspacing or .2
 	menu.index = 1
 	menu.nextOpenSpot = 0
 	menu.buttons = {}
@@ -154,13 +150,3 @@ Menu = function(menu)
 	menu:createMainOSG()
 	return menu
 end
-mymenu = Menu({})
-mymenu:addButton(MenuItem{label="Button1"})
-mymenu:addButton(MenuItem{label="Button2"})
-mymenu:addButton(MenuItem{label="Button3"})
-mymenu:addButton(MenuItem{label="Button4"})
-mymenu:addButton(MenuItem{label="Button5"})
-mymenu:addButton(MenuItem{label="Button6"})
-RelativeTo.World:addChild(mymenu.osg)
-
--- mymenu:highlightNext()
