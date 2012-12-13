@@ -1,15 +1,16 @@
 --Propeller Method for Nativation
 require("Actions")
+
 xform = Transform{Sphere{}}
 RelativeTo.World:addChild(xform)
 Actions.addFrameAction(
 	function()
-		local velocityThreshold = 0
+		local velocityThreshold = 0.01
 		local deviceStill = true
-		local device = gadget.PositionInterface("VJWand")
+		local device = gadget.PositionInterface("WristTargetProxy")
 		local lastFrame = 0
 		local velocity = 1
-		local direction = 0
+		-- local direction = 0
 		local dt = Actions.waitForRedraw()
 		while true do
 			local quat = device.matrix:getRotate()
@@ -17,16 +18,17 @@ Actions.addFrameAction(
 			velocity = math.abs(thisFrame-lastFrame)
 			local oldX = xform:getPosition():x()
 			if velocity > velocityThreshold then
-				if deviceStill then
-					direction = (lastFrame-thisFrame)/math.abs(lastFrame-thisFrame)
-					deviceStill = false
-				end
+				-- if deviceStill then
+					-- direction = (lastFrame-thisFrame)/math.abs(lastFrame-thisFrame)
+					-- deviceStill = false
+					-- dt = Actions.waitForRedraw()
+				-- end
 				print(velocity)
-				print(direction)
-				xform:setPosition(osg.Vec3d(oldX+(direction*velocity*5*dt),0,0))
+				-- print(direction)
+				xform:setPosition(osg.Vec3d(oldX+(velocity*5*dt),0,0))
 				dt = Actions.waitForRedraw()
 			else
-				print("Device Still")
+				 print("Device Still")
 				deviceStill = true
 				dt = Actions.waitForRedraw()
 			end
