@@ -28,37 +28,31 @@ xform = Transform{Sphere{}}
 RelativeTo.World:addChild(xform)
 Actions.addFrameAction(
 	function()
-		local velocityThreshold = 0.01
+		local velocityThreshold = 0.005
 		local cycles = 25
-		-- local stillLastFrame = true
-		-- local device = gadget.PositionInterface("WristTargetProxy")
+		local direction = 1
+		-- local device = gadget.PositionInterface("WristTargetProxy") -- For METAL
 		local device = gadget.PositionInterface("VJWand")
+		local lastVelocity = 1
 		local lastFrame = 0
 		local history = {}
 		for i=1,cycles do history[i] = 0 end
-		local velocity = 1
 		local dt = Actions.waitForRedraw()
+		
 		while true do
 			velocity = 0
-			local thisFrame = device.matrix:getRotate():asVec3():y()
+			local thisFrame = device.matrix:getRotate():asVec3():z()
 			local difference = math.abs(thisFrame-lastFrame)
-			-- if difference > 0.000001 then
-				-- for i=1,cycles do history[i] = 0 end
-			-- end
+			-- direction = (thisFrame-lastFrame)/math.abs(thisFrame-lastFrame)
+			if difference > 2*lastVelocity then
+				difference = lastVelocity
+			end
 			table.insert(history,1,difference)
 			for i=1,#history do velocity = velocity+history[i] end
 			velocity = velocity/#history
-			local oldX = xform:getPosition():x()
 			if velocity > velocityThreshold then
-				-- stillLastFrame = false
 				print(velocity)
-				xform:setPosition(osg.Vec3d(oldX+(velocity*25*dt),0,0))
-				dt = Actions.waitForRedraw()
-			else
-				-- if not stillLastFrame then
-					-- print("Device Still")
-					-- stillLastFrame = true
-				-- end
+				xform:setPosition(osg.Vec3d(xform:getPosition():x()+(velocity*25*dt*direction),0,0))
 				dt = Actions.waitForRedraw()
 			end
 			lastFrame = thisFrame
@@ -68,3 +62,4 @@ Actions.addFrameAction(
 
 	end
 )
+
