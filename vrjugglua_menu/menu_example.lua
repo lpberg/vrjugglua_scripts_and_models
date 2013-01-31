@@ -14,19 +14,23 @@ factory = Transform{
 }
 RelativeTo.World:addChild(factory)
 
+function fun()
+	print ("we are all having fun!")
+end
+function nofun()
+	print ("we are all NOT having fun!")
+end
+
 mymenu = Menu({buttonspacing=.05})
-mymenu:addButton(MenuItem{label="Button1"})
-mymenu:addButton(MenuItem{label="Button2"})
-mymenu:addButton(MenuItem{label="Button3"})
-mymenu:addButton(MenuItem{label="Button4"})
-mymenu:addButton(MenuItem{label="Button5"})
-mymenu:addButton(MenuItem{label="Button6"})
+mymenu:addButton(MenuItem{label="Button1",width=1.5})
+mymenu:addButton(MenuItem{label="Show Button2",label2="Hide Button2",width=1.5,action = fun,action2 = nofun})
+mymenu:addButton(MenuItem{label="Button3",width=1.5})
+mymenu:addButton(MenuItem{label="Button4",width=1.5})
+mymenu:addButton(MenuItem{label="Button5",width=1.5})
+mymenu:addButton(MenuItem{label="Button6",width=1.5})
 
-
--- menu:addChild(Transform{position={0,1.75,0},mymenu.osg})
 mymenu.osg:setPosition(osg.Vec3d(0,1.75,0))
-RelativeTo.World:addChild(mymenu.osg)
-
+RelativeTo.Room:addChild(mymenu.osg)
 
 Actions.addFrameAction(function()
 	local drawBtn = gadget.DigitalInterface("VJButton0")
