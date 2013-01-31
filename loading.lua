@@ -121,7 +121,7 @@ local _fortyfive4Object = Transform{
 }
 local _mainObject = Transform{
 	scale = .25,
-	position = {1,1,0},
+	position = {2,2,0},
 	_vertObject,
 	_horizObject,
 	_fortyfive1Object,
@@ -131,11 +131,11 @@ local _mainObject = Transform{
 }
 startLoading = function()
 	RelativeTo.World:addChild(_mainObject)
-	Actions.addFrameAction(_createRotation(_mainObject,"z",175))
+	Actions.addFrameAction(_createRotation(_mainObject,"z",200))
 end
 stopLoading = function()
 	RelativeTo.World:removeChild(_mainObject)
-	Actions.removeFrameAction(_createRotation(_mainObject,"z",175))
+	Actions.removeFrameAction(_createRotation(_mainObject,"z",200))
 end
 
 --USE EXAMPLE:
