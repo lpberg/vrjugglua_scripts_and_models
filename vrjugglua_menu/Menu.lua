@@ -4,9 +4,9 @@ require("Text")
 local MenuItemIndex = { isMenuItem = true}
 local MIMT = { __index = MenuItemIndex }
 
-function MenuItemIndex:TextLabel()
+function MenuItemIndex:TextLabel(label)
 	texts = TextGeode{
-		tostring(self.label),
+		tostring(label),
 		color = osg.Vec4(unpack(self.labelcolor)),
 		lineHeight = self.textpadding*self.height,
 		position = {0,0,.51*self.depth},
@@ -43,22 +43,35 @@ function MenuItemIndex:Box(a)
 end
 
 function MenuItemIndex:createOSG()
-	self.switch_osg = osg.Switch()
-	self.textlabel_osg = self:TextLabel()
-	local mycolor = {(0/255),(191/255),(255/255),1}
+	--if label2 was not passed, just set it as label one (user won't see diff)
+	if self.label2 == nil then
+		self.label2 = self.label
+	end
+	
+	self.label_switch_osg = osg.Switch()
+	self.textlabel_osg = self:TextLabel(self.label)
+	self.textlabel2_osg = self:TextLabel(self.label2)
+	
+	self.label_switch_osg:addChild(self.textlabel_osg)
+	self.label_switch_osg:addChild(self.textlabel2_osg)
+	self.toggled = false
+	self.label_switch_osg:setSingleChildOn(0)
+	
+	local highlightColor = {(0/255),(191/255),(255/255),1}
+	local nonhighlightColor = {(30/255),(144/255),(255/255),1}
+	--Label 1 OSG - HIGHLIGHTED
 	self.active_osg = Transform{
 		position = {0,0,self.depth},
-		self:Box{color = mycolor},
-		self.textlabel_osg
-		
+		self:Box{color = highlightColor},
+		self.label_switch_osg
 	}
-	local mycolor = {(30/255),(144/255),(255/255),1}
+	--Label 1 OSG - NORMAL
 	self.nonactive_osg = Transform{
 		position = {0,0,0},
-		self:Box{color = mycolor},
-		self.textlabel_osg
+		self:Box{color = nonhighlightColor},
+		self.label_switch_osg
 	}
-	
+	self.switch_osg = osg.Switch()
 	self.switch_osg:addChild(self.active_osg)
 	self.switch_osg:addChild(self.nonactive_osg)
 	--turn on non-active osg
@@ -67,8 +80,14 @@ function MenuItemIndex:createOSG()
 	self.osg = Transform{position = self.position or {0,0,0},self.switch_osg}
 end
 
+
 function MenuItemIndex:select()
-	self.action()
+	if self.toggled == false then
+		self.action()
+	else
+		self.action2()
+	end
+	self:toggleText()
 end
 
 function MenuItemIndex:dehighlight()
@@ -79,9 +98,20 @@ function MenuItemIndex:highlight()
 	self.switch_osg:setSingleChildOn(0)
 end
 
+function MenuItemIndex:toggleText()
+	if self.toggled == false then
+		self.label_switch_osg:setSingleChildOn(1)
+		self.toggled = true
+	else
+		self.label_switch_osg:setSingleChildOn(0)
+		self.toggled = false
+	end
+end
+
 MenuItem = function(item)
 	item.label = item.label or "None"
 	item.action = item.action or function() print(item.label.." button pressed") end
+	item.action2 = item.action2 or item.action
 	item.labelcolor = item.labelcolor or {1.0,1.0,1.0,1.0}
 	item.textpadding = item.textpadding or .9
 	item.depth = item.depth or .05
