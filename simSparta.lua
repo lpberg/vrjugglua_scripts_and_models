@@ -3,11 +3,6 @@ require("StockModels")
 require("osgFX")
 local inMETaL = false
 
--- EXAMPLE USE
--- 1)Create Transform
--- local teapot = Transform{position = {1,0,0},StockModels.Teapot()}
--- 2)AddTransform to Scene using wrapXformInScribeSwitch()
--- RelativeTo.World:addChild(wrapXformInScribeSwitch(teapot))
 
 local Manipulables = {}
 local Manipulables_Switches = {}
@@ -24,6 +19,11 @@ local function wrapXformInScribeSwitch(xform)
 	table.insert(Manipulables_Switches, switch)
 	return switch
 end
+-- EXAMPLE USE
+-- 1)Create Transform
+-- local teapot = Transform{position = {1,0,0},StockModels.Teapot()}
+-- 2)AddTransform to Scene using wrapXformInScribeSwitch()
+-- RelativeTo.World:addChild(wrapXformInScribeSwitch(teapot))
 
 function moveAction(dt)
 	local dragBtn, changeBtn
@@ -56,9 +56,15 @@ function moveAction(dt)
 		end
 		local node = Manipulables[activeObject]
 		local offset = node:getPosition() - wand.position
+		local node_matrix = osg.Matrixd(node:getAttitude())
+		local xformFromNodeToWand = node_matrix * osg.Matrixd.inverse(wand.matrix)
+
 		while dragBtn.pressed do
 			node:setPosition(wand.position + offset)
-			node:setAttitude(wand.orientation)
+			local new_mat = xformFromNodeToWand * osg.Matrixd(wand.matrix)
+			local new_quat = osg.Quat()
+			new_quat:set(new_mat)
+			node:setAttitude(new_quat)
 			Actions.waitForRedraw()
 		end
 	end
