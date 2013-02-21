@@ -1,7 +1,7 @@
 require("Actions")
 require("StockModels")
 require("osgFX")
-local metal = true
+local metal = false
 
 local Manipulables = {}
 local Manipulables_Switches = {}
