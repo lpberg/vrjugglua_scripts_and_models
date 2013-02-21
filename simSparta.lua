@@ -1,33 +1,46 @@
 require("Actions")
 require("StockModels")
 require("osgFX")
-local inMETaL = false
-
+local metal = true
 
 local Manipulables = {}
 local Manipulables_Switches = {}
 
 local function wrapXformInScribeSwitch(xform)
-	table.insert(Manipulables, xform)
+	local MT = osg.MatrixTransform()
+	MT:addChild(xform)
+	table.insert(Manipulables, MT)
 	local switch = osg.Switch()
 	local scribe = osgFX.Scribe()
 	scribe:setWireframeColor(osg.Vec4f(0, 0, 1, 1))
-	switch:addChild(xform)
+	switch:addChild(MT)
 	switch:addChild(scribe)
-	scribe:addChild(xform)
+	scribe:addChild(MT)
 	switch:setSingleChildOn(0)
 	table.insert(Manipulables_Switches, switch)
 	return switch
 end
--- EXAMPLE USE
+-- EXAMPLE USE - SINGLE OBJECTS
 -- 1)Create Transform
+
 -- local teapot = Transform{position = {1,0,0},StockModels.Teapot()}
 -- 2)AddTransform to Scene using wrapXformInScribeSwitch()
 -- RelativeTo.World:addChild(wrapXformInScribeSwitch(teapot))
 
+-- EXAMPLE USE - MULTIPLE OBJECTS (GROUP)
+-- 1)Create Transform
+local teapot = Transform{position = {0,0,0},StockModels.Teapot()}
+local teapot2 = Transform{position = {1,0,0},StockModels.Teapot()}
+local teapots = Transform{
+	wrapXformInScribeSwitch(teapot),
+	wrapXformInScribeSwitch(teapot2),
+}
+-- 2)AddTransform to Scene using wrapXformInScribeSwitch()
+RelativeTo.World:addChild(wrapXformInScribeSwitch(teapots))
+
 function moveAction(dt)
 	local dragBtn, changeBtn
-	if not inMETaL then
+	if not metal then
 		print("Using Workstation Defaults")
 		changeBtn = gadget.DigitalInterface("VJButton0")
 		dragBtn = gadget.DigitalInterface("VJButton2")
@@ -36,35 +49,30 @@ function moveAction(dt)
 		changeBtn = gadget.DigitalInterface("WMButtonPlus")
 		dragBtn = gadget.DigitalInterface("WMButtonB")
 	end
+
 	local wand = gadget.PositionInterface("VJWand")
 	local activeObject = 1
 
 	while true do
 		while not dragBtn.pressed do
 			if changeBtn.justPressed then
-				-- turn OFF scribe for previously highlighted node
 				Manipulables_Switches[activeObject]:setSingleChildOn(0)
 				activeObject = activeObject + 1
 				if activeObject > #Manipulables then
 					activeObject = 1
 				end
-				-- turn ON scribe for previously highlighted node
 				Manipulables_Switches[activeObject]:setSingleChildOn(1)
-				-- print("Change button pressed: active object now #" .. activeObject .. " of " .. #Manipulables)
 			end
 			Actions.waitForRedraw()
 		end
+
 		local node = Manipulables[activeObject]
-		local offset = node:getPosition() - wand.position
-		local node_matrix = osg.Matrixd(node:getAttitude())
+		local node_matrix = node:getMatrix()
 		local xformFromNodeToWand = node_matrix * osg.Matrixd.inverse(wand.matrix)
 
 		while dragBtn.pressed do
-			node:setPosition(wand.position + offset)
 			local new_mat = xformFromNodeToWand * osg.Matrixd(wand.matrix)
-			local new_quat = osg.Quat()
-			new_quat:set(new_mat)
-			node:setAttitude(new_quat)
+			node:setMatrix(new_mat)
 			Actions.waitForRedraw()
 		end
 	end
