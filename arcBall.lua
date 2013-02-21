@@ -1,9 +1,24 @@
 require("Actions")
 require("StockModels")
 
-local wand = gadget.PositionInterface("VJWand")
+local function MySphere(a)
+	local pos = osg.Vec3(0.0, 0.0, 0.0)
+	if a.position then
+		pos:set(unpack(a.position))
+	end
+	local sphere = osg.Sphere(pos, a.radius or 1.0)
+	local drbl = osg.ShapeDrawable(sphere)
+	local color = osg.Vec4(0,0,0,1)
+	if a.color then
+		color:set(unpack(a.color))
+	end
+	drbl:setColor(color)
+	local geode = osg.Geode()
+	geode:addDrawable(drbl)
+	return geode
+end
 
-function TransparentGroup(arg)
+local function TransparentGroup(arg)
 	local group = osg.Group()
 	-- Add all passed nodes to the group to make transparent
 	for _, node in ipairs(arg) do
@@ -24,74 +39,69 @@ function TransparentGroup(arg)
 	return group
 end
 
-local TransparentSphereRadius = .5
-local TransparentSphere = Transform{TransparentGroup{Sphere{radius = TransparentSphereRadius}}}
-local marker = Transform{Sphere{radius = .05}}
-local teapot = osg.MatrixTransform()
-teapot:addChild(Transform{scale = .25,StockModels.Teapot()})
-local objects = Transform{
-	TransparentSphere,
-	teapot,
-	marker,
+
+--OBJECT OF INTEREST
+local xform = MatrixTransform{
+	Transform{scale = .25,StockModels.Teapot()}
 }
-RelativeTo.World:addChild(objects)
-
-function getWandPos()
-	return RelativeTo.World:getInverseMatrix():preMult(wand.position)
-end
-
-function getMarkerPos()
-	wand_pos = RelativeTo.World:getInverseMatrix():preMult(wand.position)
-	base_pos = objects:getPosition()
-	diff_vec = (wand_pos - base_pos)
-	diff_vec:normalize()
-	return diff_vec*TransparentSphereRadius
-end
-
-function calcAngelBetweenVectors(vec1,vec2)
-	local vec1_mag = vec1:length()
-	local vec2_mag = vec2:length()
-	local dot_prod = (vec1:x()*vec2:x())+(vec1:y()*vec2:y())+(vec1:z()*vec2:z())
-	if dot_prod ~= 0 then
-		theta = math.deg(math.cos(dot_prod/(vec1_mag*vec2_mag)))
-	else
-		theta = math.deg(math.cos(0))
-	end
-	return theta
-end
-
-function cross_product(vec1,vec2)
-  local x =  ( (vec1:y() * vec2:z()) - (vec1:z() * vec2:y()) )
-  local y = -( (vec1:x() * vec2:z()) - (vec1:z() * vec2:x()) )
-  local z =  ( (vec1:x() * vec2:y()) - (vec1:y() * vec2:x()) )
-  return osg.Vec3d(x,y,z)
-end
-
-
+local wand = gadget.PositionInterface("VJWand")
+local dragBtn = gadget.DigitalInterface("VJButton2")
+-- local dragBtn = gadget.DigitalInterface("WMButtonB")
 
 Actions.addFrameAction(
 	function()
-		dragBtn = gadget.DigitalInterface("VJButton2")
-		dt = Actions.waitForRedraw()
+		xform_pos = xform:getMatrix():getTrans()
+		local TransparentSphereRadius = xform:computeBound():radius()
+		local TransparentSphere = Transform{TransparentGroup{Sphere{radius = TransparentSphereRadius}}}
+		local marker = Transform{Sphere{radius = TransparentSphereRadius/10}}
+		local red_marker_switch = osg.Switch()
+		local red_marker = Transform{MySphere{color={1,0,0,1},radius = TransparentSphereRadius/10}}
+		red_marker_switch:addChild(red_marker)
+		local outer_red = Transform{red_marker_switch}
+
+		local objects = Transform{
+			position = xform_pos,
+			TransparentSphere,
+			xform,
+			marker,
+			outer_red
+		}
+		RelativeTo.World:addChild(objects)
+		
+		local function getWandPos()
+			return RelativeTo.World:getInverseMatrix():preMult(wand.position)
+		end
+
+		local function getMarkerPos()
+			wand_pos = RelativeTo.World:getInverseMatrix():preMult(wand.position)
+			base_pos = objects:getPosition()
+			diff_vec = (wand_pos - base_pos)
+			diff_vec:normalize()
+			return diff_vec*TransparentSphereRadius
+		end
+		
+		Actions.waitForRedraw()
 		while true do
 			while not dragBtn.pressed do
+				red_marker_switch:setAllChildrenOff()
 				marker:setPosition(getMarkerPos())
-				dt = Actions.waitForRedraw()
+				Actions.waitForRedraw()
 			end
 			anchor_pos = getMarkerPos()
-			dt = Actions.waitForRedraw()
+			anchor_matrix = xform:getMatrix()
+			red_marker_switch:setAllChildrenOn()
 			while dragBtn.pressed do
+				outer_red:setPosition(getMarkerPos())
 				new_marker_pos = getMarkerPos()
-				local angle = calcAngelBetweenVectors(anchor_pos,new_marker_pos)*dt*dt*1.25
-				local cross_prod = cross_product(anchor_pos,new_marker_pos)
-				
-				local quat = osg.Quat(angle,cross_prod)
+				local quat = osg.Quat()
+				quat:makeRotate(anchor_pos,new_marker_pos)
 				local rot_mat = osg.Matrixd(quat)
-				local new_matrix = teapot:getMatrix() 
-				-- new_matrix:preMult(rot_mat)
-				new_matrix:postMult(rot_mat)
-				teapot:setMatrix(new_matrix)
-				dt = Actions.waitForRedraw()
+				local new_matrix = osg.Matrixd()
+				new_matrix:makeIdentity() 
+				local new_matrix = rot_mat*new_matrix
+				local new_matrix = anchor_matrix*new_matrix
+				xform:setMatrix(new_matrix)
+				Actions.waitForRedraw()
 			end
 			Actions.waitForRedraw()
 		end
