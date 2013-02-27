@@ -1,5 +1,8 @@
 require("Actions")
 require("StockModels")
+require("getScriptFilename")
+vrjLua.appendToModelSearchPath(getScriptFilename())
+dofile(vrjLua.findInModelSearchPath([[env/voyager/loadVoyager.lua]]))
 
 local function MySphere(a)
 	local pos = osg.Vec3(0.0, 0.0, 0.0)
@@ -44,6 +47,7 @@ end
 local xform = MatrixTransform{
 	Transform{scale = .25,StockModels.Teapot()}
 }
+
 local wand = gadget.PositionInterface("VJWand")
 local dragBtn = gadget.DigitalInterface("VJButton2")
 -- local dragBtn = gadget.DigitalInterface("WMButtonB")
@@ -60,7 +64,8 @@ Actions.addFrameAction(
 		local outer_red = Transform{red_marker_switch}
 
 		local objects = Transform{
-			position = xform_pos,
+			-- position = xform_pos,
+			position = {1.25,1,.5},
 			TransparentSphere,
 			xform,
 			marker,
