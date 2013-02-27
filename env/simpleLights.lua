@@ -12,7 +12,7 @@ ss = RelativeTo.World:getOrCreateStateSet()
 function doLight1()
 
 	l1 = osg.Light()
-	l1:setAmbient(osg.Vec4(0.8, 0.8, 0.8, 0.8))
+	l1:setAmbient(osg.Vec4(0.3, 0.3, 0.3, 1))
 	ls1 = osg.LightSource()
 	ls1:setLight(l1)
 	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
@@ -45,7 +45,7 @@ function doLight2()
 
 	l2 = osg.Light()
 	l2:setLightNum(1)
-	l2:setAmbient(osg.Vec4(.8, .8, 0.6, .50))
+	l2:setAmbient(osg.Vec4(.2, .2, 0.2, 1))
 	
 	ls2 = osg.LightSource()
 	ls2:setLight(l2)
@@ -56,9 +56,9 @@ function doLight2()
 	RelativeTo.Room:addChild(
 		ls2
 	)
-	l2:setPosition(osg.Vec4(1.5, 2, 0, 1.0))
+	l2:setPosition(osg.Vec4(1.5, 1, 0, 1.0))
 end
 
-doLight1()
+-- doLight1()
 doLight2()
 --doLight1_5()
