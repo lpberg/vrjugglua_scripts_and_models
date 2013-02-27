@@ -1,7 +1,7 @@
 require("Actions")
 require("StockModels")
 require("osgFX")
-local metal = false
+-- local metal = false
 
 local Manipulables = {}
 local Manipulables_Switches = {}
@@ -23,20 +23,20 @@ end
 -- EXAMPLE USE - SINGLE OBJECTS
 -- 1)Create Transform
 
--- local teapot = Transform{position = {1,0,0},StockModels.Teapot()}
+local teapot = Transform{position = {1,0,0},StockModels.Teapot()}
 -- 2)AddTransform to Scene using wrapXformInScribeSwitch()
--- RelativeTo.World:addChild(wrapXformInScribeSwitch(teapot))
+RelativeTo.World:addChild(wrapXformInScribeSwitch(teapot))
 
 -- EXAMPLE USE - MULTIPLE OBJECTS (GROUP)
 -- 1)Create Transform
-local teapot = Transform{position = {0,0,0},StockModels.Teapot()}
-local teapot2 = Transform{position = {1,0,0},StockModels.Teapot()}
-local teapots = Transform{
-	wrapXformInScribeSwitch(teapot),
-	wrapXformInScribeSwitch(teapot2),
-}
+-- local teapot = Transform{position = {0,0,0},StockModels.Teapot()}
+-- local teapot2 = Transform{position = {1,0,0},StockModels.Teapot()}
+-- local teapots = Transform{
+	-- wrapXformInScribeSwitch(teapot),
+	-- wrapXformInScribeSwitch(teapot2),
+-- }
 -- 2)AddTransform to Scene using wrapXformInScribeSwitch()
-RelativeTo.World:addChild(wrapXformInScribeSwitch(teapots))
+-- RelativeTo.World:addChild(wrapXformInScribeSwitch(teapots))
 
 function moveAction(dt)
 	local dragBtn, changeBtn
@@ -65,13 +65,15 @@ function moveAction(dt)
 			end
 			Actions.waitForRedraw()
 		end
-		-- nav_mat = RelativeTo.World:getInverseMatrix():preMult(wand.matrix)
+		--trying to make up for navigation, not sure where it fits in.
+		local nav_mat = RelativeTo.World:getInverseMatrix()
+		-- nav_mat:preMult(wand.matrix)
 		local node = Manipulables[activeObject]
 		local node_matrix = node:getMatrix()
-		local xformFromNodeToWand = node_matrix * osg.Matrixd.inverse(wand.matrix) 
+		local xformFromNodeToWand =  node_matrix * osg.Matrixd.inverse(wand.matrix) *nav_mat 
 
 		while dragBtn.pressed do
-			local new_mat = xformFromNodeToWand * wand.matrix 
+			local new_mat = xformFromNodeToWand * wand.matrix
 			node:setMatrix(new_mat)
 			Actions.waitForRedraw()
 		end
