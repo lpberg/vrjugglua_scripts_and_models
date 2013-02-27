@@ -65,13 +65,13 @@ function moveAction(dt)
 			end
 			Actions.waitForRedraw()
 		end
-
+		-- nav_mat = RelativeTo.World:getInverseMatrix():preMult(wand.matrix)
 		local node = Manipulables[activeObject]
 		local node_matrix = node:getMatrix()
-		local xformFromNodeToWand = node_matrix * osg.Matrixd.inverse(wand.matrix)
+		local xformFromNodeToWand = node_matrix * osg.Matrixd.inverse(wand.matrix) 
 
 		while dragBtn.pressed do
-			local new_mat = xformFromNodeToWand * osg.Matrixd(wand.matrix)
+			local new_mat = xformFromNodeToWand * wand.matrix 
 			node:setMatrix(new_mat)
 			Actions.waitForRedraw()
 		end
