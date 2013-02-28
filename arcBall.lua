@@ -11,7 +11,7 @@ local function MySphere(a)
 	end
 	local sphere = osg.Sphere(pos, a.radius or 1.0)
 	local drbl = osg.ShapeDrawable(sphere)
-	local color = osg.Vec4(0,0,0,1)
+	local color = osg.Vec4(0, 0, 0, 1)
 	if a.color then
 		color:set(unpack(a.color))
 	end
@@ -45,7 +45,7 @@ end
 
 --OBJECT OF INTEREST
 local xform = MatrixTransform{
-	Transform{scale = .25,StockModels.Teapot()}
+	Transform{scale = .25, StockModels.Teapot()}
 }
 
 local wand = gadget.PositionInterface("VJWand")
@@ -57,22 +57,22 @@ Actions.addFrameAction(
 		xform_pos = xform:getMatrix():getTrans()
 		local TransparentSphereRadius = xform:computeBound():radius()
 		local TransparentSphere = Transform{TransparentGroup{Sphere{radius = TransparentSphereRadius}}}
-		local marker = Transform{Sphere{radius = TransparentSphereRadius/10}}
+		local marker = Transform{Sphere{radius = TransparentSphereRadius / 10}}
 		local red_marker_switch = osg.Switch()
-		local red_marker = Transform{MySphere{color={1,0,0,1},radius = TransparentSphereRadius/10}}
+		local red_marker = Transform{MySphere{color = {1, 0, 0, 1}, radius = TransparentSphereRadius / 10}}
 		red_marker_switch:addChild(red_marker)
 		local outer_red = Transform{red_marker_switch}
 
 		local objects = Transform{
 			-- position = xform_pos,
-			position = {1.25,1,.5},
+			position = {1.25, 1, .5},
 			TransparentSphere,
 			xform,
 			marker,
 			outer_red
 		}
 		RelativeTo.World:addChild(objects)
-		
+
 		local function getWandPos()
 			return RelativeTo.World:getInverseMatrix():preMult(wand.position)
 		end
@@ -82,9 +82,9 @@ Actions.addFrameAction(
 			base_pos = objects:getPosition()
 			diff_vec = (wand_pos - base_pos)
 			diff_vec:normalize()
-			return diff_vec*TransparentSphereRadius
+			return diff_vec * TransparentSphereRadius
 		end
-		
+
 		Actions.waitForRedraw()
 		while true do
 			while not dragBtn.pressed do
@@ -99,12 +99,12 @@ Actions.addFrameAction(
 				outer_red:setPosition(getMarkerPos())
 				new_marker_pos = getMarkerPos()
 				local quat = osg.Quat()
-				quat:makeRotate(anchor_pos,new_marker_pos)
+				quat:makeRotate(anchor_pos, new_marker_pos)
 				local rot_mat = osg.Matrixd(quat)
 				local new_matrix = osg.Matrixd()
-				new_matrix:makeIdentity() 
-				local new_matrix = rot_mat*new_matrix
-				local new_matrix = anchor_matrix*new_matrix
+				new_matrix:makeIdentity()
+				local new_matrix = rot_mat * new_matrix
+				local new_matrix = anchor_matrix * new_matrix
 				xform:setMatrix(new_matrix)
 				Actions.waitForRedraw()
 			end
@@ -115,4 +115,3 @@ Actions.addFrameAction(
 
 
 
-	
