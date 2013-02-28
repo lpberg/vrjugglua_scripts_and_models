@@ -1,63 +1,46 @@
 --Propeller Method for Nativation
 require("Actions")
+require("getScriptFilename")
+vrjLua.appendToModelSearchPath(getScriptFilename())
+dofile(vrjLua.findInModelSearchPath([[one_euro_filter.lua]]))
 
-
-function table_slice (values,i1,i2)
-	local res = {}
-	local n = #values
-	-- default values for range
-	i1 = i1 or 1
-	i2 = i2 or n
-	if i2 < 0 then
-		i2 = n + i2 + 1
-	elseif i2 > n then
-		i2 = n
-	end
-	if i1 < 1 or i1 > n then
-		return {}
-	end
-	local k = 1
-	for i = i1,i2 do
-		res[k] = values[i]
-		k = k + 1
-	end
-	return res
-end
-
-xform = Transform{Sphere{}}
+local xform = Transform{Sphere{}}
 RelativeTo.World:addChild(xform)
+
 Actions.addFrameAction(
 	function()
-		local velocityThreshold = 0.005
-		local cycles = 25
+		local f = OneEuroFilter{
+			freq = 120, -- Hz
+			mincutoff = 1.0, -- FIXME
+			beta = 1.0, -- FIXME
+			dcutoff = 1.0 -- this one should be ok
+		}
+		local minVelocityThreshold = 0
 		local direction = 1
 		-- local device = gadget.PositionInterface("WristTargetProxy") -- For METAL
 		local device = gadget.PositionInterface("VJWand")
-		local lastVelocity = 1
+		local lastVelocity = 0
 		local lastFrame = 0
-		local history = {}
-		for i=1,cycles do history[i] = 0 end
-		local dt = Actions.waitForRedraw()
-		
+		local velocity_factor = 25
+		local timestamp = 0.0
 		while true do
+			local dt = Actions.waitForRedraw()
 			velocity = 0
 			local thisFrame = device.matrix:getRotate():asVec3():z()
 			local difference = math.abs(thisFrame-lastFrame)
 			-- direction = (thisFrame-lastFrame)/math.abs(thisFrame-lastFrame)
-			if difference > 2*lastVelocity then
-				difference = lastVelocity
-			end
-			table.insert(history,1,difference)
-			for i=1,#history do velocity = velocity+history[i] end
-			velocity = velocity/#history
-			if velocity > velocityThreshold then
+			-- if difference > 2*lastVelocity then
+			-- difference = lastVelocity
+			-- end
+			velocity = f:callFunc(difference, timestamp)
+			timestamp = timestamp + 1.0 / f.freq
+			if velocity > minVelocityThreshold then
 				print(velocity)
-				xform:setPosition(osg.Vec3d(xform:getPosition():x()+(velocity*25*dt*direction),0,0))
+				local displacement = xform:getPosition():x() + (velocity * velocity_factor * dt * direction)
+				xform:setPosition(osg.Vec3d(displacement, 0, 0))
 				dt = Actions.waitForRedraw()
 			end
 			lastFrame = thisFrame
-			history = table_slice(history,1,#history-1)
-			dt = Actions.waitForRedraw()
 		end
 
 	end
