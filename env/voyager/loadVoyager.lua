@@ -15,6 +15,6 @@ local castle = Transform{
 		-- orientation = AngleAxis(Degrees(270), Axis{0.0, 1.0, 0.0}),
 		Model("castle.ive"),
 	}
-}s
+}
 RelativeTo.World:addChild(castle)
 RelativeTo.World:addChild(voyager)
