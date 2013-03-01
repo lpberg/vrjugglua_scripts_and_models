@@ -1,3 +1,4 @@
+--Using Code from: https://gist.github.com/lpberg/5067603
 require("Actions")
 require("StockModels")
 require("osgFX")
@@ -6,37 +7,47 @@ require("osgFX")
 local Manipulables = {}
 local Manipulables_Switches = {}
 
-local function wrapXformInScribeSwitch(xform)
-	local MT = osg.MatrixTransform()
-	MT:addChild(xform)
-	table.insert(Manipulables, MT)
-	local switch = osg.Switch()
-	local scribe = osgFX.Scribe()
-	scribe:setWireframeColor(osg.Vec4f(0, 0, 1, 1))
-	switch:addChild(MT)
-	switch:addChild(scribe)
-	scribe:addChild(MT)
-	switch:setSingleChildOn(0)
-	table.insert(Manipulables_Switches, switch)
-	return switch
+function createManipulatableObject(xform)
+
+	function wrapTransformInBlueScribeSwitch(xform)
+		local switch = osg.Switch()
+		local scribe = osgFX.Scribe()
+		scribe:setWireframeColor(osg.Vec4f(0, 0, 1, 1))
+		switch:addChild(xform)
+		switch:addChild(scribe)
+		scribe:addChild(xform)
+		switch:setSingleChildOn(0)
+		return switch
+	end
+
+	function wrapTransformInMatrixTransform(xform)
+		local MT = osg.MatrixTransform()
+		MT:addChild(xform)
+		return MT
+	end
+
+	local xform_asMatrixTransform = wrapTransformInMatrixTransform(xform)
+	local xform_asScribeSwitch = wrapTransformInBlueScribeSwitch(xform_asMatrixTransform)
+	table.insert(Manipulables, xform_asMatrixTransform)
+	table.insert(Manipulables_Switches, xform_asScribeSwitch)
+
+	return xform_asScribeSwitch
 end
--- EXAMPLE USE - SINGLE OBJECTS
--- 1)Create Transform
 
-local teapot = Transform{position = {1,0,0},StockModels.Teapot()}
--- 2)AddTransform to Scene using wrapXformInScribeSwitch()
-RelativeTo.World:addChild(wrapXformInScribeSwitch(teapot))
+local getRoomToWorld = function()
+	return RelativeTo.World:getInverseMatrix()
+end
 
--- EXAMPLE USE - MULTIPLE OBJECTS (GROUP)
--- 1)Create Transform
--- local teapot = Transform{position = {0,0,0},StockModels.Teapot()}
--- local teapot2 = Transform{position = {1,0,0},StockModels.Teapot()}
--- local teapots = Transform{
-	-- wrapXformInScribeSwitch(teapot),
-	-- wrapXformInScribeSwitch(teapot2),
--- }
--- 2)AddTransform to Scene using wrapXformInScribeSwitch()
--- RelativeTo.World:addChild(wrapXformInScribeSwitch(teapots))
+--- This is a HIDEOUS HACK @todo
+local matrixMult = function(a, b)
+	local copyOfA = osg.Matrixd(a)
+	copyOfA:preMult(b)
+	return copyOfA
+end
+
+local transformMatrixRoomToWorld = function(m)
+	return matrixMult(getRoomToWorld(), m)
+end
 
 function moveAction(dt)
 	local dragBtn, changeBtn
@@ -49,9 +60,12 @@ function moveAction(dt)
 		changeBtn = gadget.DigitalInterface("WMButtonPlus")
 		dragBtn = gadget.DigitalInterface("WMButtonB")
 	end
-
 	local wand = gadget.PositionInterface("VJWand")
 	local activeObject = 1
+
+	local getWandInWorld = function()
+		return transformMatrixRoomToWorld(wand.matrix)
+	end
 
 	while true do
 		while not dragBtn.pressed do
@@ -65,15 +79,15 @@ function moveAction(dt)
 			end
 			Actions.waitForRedraw()
 		end
-		--trying to make up for navigation, not sure where it fits in.
-		local nav_mat = RelativeTo.World:getInverseMatrix()
-		-- nav_mat:preMult(wand.matrix)
+
 		local node = Manipulables[activeObject]
 		local node_matrix = node:getMatrix()
-		local xformFromNodeToWand =  node_matrix * osg.Matrixd.inverse(wand.matrix) *nav_mat 
+		--local nodeRelativeToWand =  node_matrix * osg.Matrixd.inverse(getWandInWorld()) --what should be possible
+		local nodeRelativeToWand = matrixMult(osg.Matrixd.inverse(getWandInWorld()), node_matrix) -- what is required
 
 		while dragBtn.pressed do
-			local new_mat = xformFromNodeToWand * wand.matrix
+			--local new_mat = nodeRelativeToWand * getWandInWorld()
+			local new_mat = matrixMult(getWandInWorld(), nodeRelativeToWand)
 			node:setMatrix(new_mat)
 			Actions.waitForRedraw()
 		end
@@ -81,3 +95,22 @@ function moveAction(dt)
 end
 
 Actions.addFrameAction(moveAction)
+
+--EXAMPLES OF USE
+
+function exampleSingleObject()
+	print("EXAMPLE USE - SINGLE OBJECT (i.e. Transform)")
+	local sphere = Transform{position = {1, 0, 0}, Sphere{radius = .125}}
+	RelativeTo.World:addChild(createManipulatableObject(sphere))
+end
+
+function exampleMultipleObjects()
+	print("EXAMPLE USE - MULTIPLE OBJECTS (GROUP)")
+	local sphere1 = Transform{position = {0, 0, 0}, Sphere{radius = .125}}
+	local sphere2 = Transform{position = {1, 0, 0}, Sphere{radius = .125}}
+	local spheres = Transform{
+		createManipulatableObject(sphere1),
+		createManipulatableObject(sphere2),
+	}
+	RelativeTo.World:addChild(createManipulatableObject(spheres))
+end
