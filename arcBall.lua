@@ -49,8 +49,8 @@ local xform = MatrixTransform{
 }
 
 local wand = gadget.PositionInterface("VJWand")
-local dragBtn = gadget.DigitalInterface("VJButton2")
--- local dragBtn = gadget.DigitalInterface("WMButtonB")
+-- local dragBtn = gadget.DigitalInterface("VJButton2")
+local dragBtn = gadget.DigitalInterface("WMButtonB")
 
 Actions.addFrameAction(
 	function()
