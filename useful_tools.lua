@@ -125,3 +125,7 @@ end
 function getLightsaber()
 	return Stock_Models.lightsaber
 end
+
+function loadSkyBoxWithBasicLighting()
+	dofile(vrjLua.findInModelSearchPath([[environments/skybox/loadSkybox.lua]]))
+end
