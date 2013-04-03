@@ -93,16 +93,7 @@ end
 
 
 function applyBasicLighting()
-	local ss = RelativeTo.World:getOrCreateStateSet()
-	local l1 = osg.Light()
-	l1:setLightNum(1)
-	l1:setAmbient(osg.Vec4(.1, .1, .1, 1.0))
-	local ls1 = osg.LightSource()
-	ls1:setLight(l1)
-	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
-	ss:setAssociatedModes(l1, osg.StateAttribute.Values.ON)
-	RelativeTo.Room:addChild(ls1)
-	l1:setPosition(osg.Vec4(1, 1, .5, 1.0))
+	dofile(vrjLua.findInModelSearchPath([[simpleLights.lua]]))
 end
 
 function changeTransformColor(xform, color)
