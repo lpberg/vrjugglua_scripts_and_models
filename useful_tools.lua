@@ -97,14 +97,11 @@ function applyBasicLighting()
 	local l1 = osg.Light()
 	l1:setLightNum(1)
 	l1:setAmbient(osg.Vec4(.1, .1, .1, 1.0))
-	l1:setDiffuse(osg.Vec4(.8, .8, .8, 1.0))
 	local ls1 = osg.LightSource()
 	ls1:setLight(l1)
 	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 	ss:setAssociatedModes(l1, osg.StateAttribute.Values.ON)
-	RelativeTo.Room:addChild(
-		ls1
-	)
+	RelativeTo.Room:addChild(ls1)
 	l1:setPosition(osg.Vec4(1, 1, .5, 1.0))
 end
 
@@ -116,7 +113,7 @@ function changeTransformColor(xform, color)
 	mat:setSpecular(0x0408, osg.Vec4(0.2, 0.2, 0.2, 1.0))
 	mat:setShininess(0x0408, 1)
 	local ss = xform:getOrCreateStateSet()
-	ss:setAttributeAndModes(mat, osg.StateAttribute.Values.ON + osg.StateAttribute.Values.OVERRIDE);
+	ss:setAttributeAndModes(mat, osg.StateAttribute.Values.ON+osg.StateAttribute.Values.OVERRIDE);
 end
 
 function getBasicFactory()
@@ -147,4 +144,8 @@ end
 
 function loadSkyBoxWithBasicLighting()
 	dofile(vrjLua.findInModelSearchPath([[environments/skybox/loadSkybox.lua]]))
+end
+
+function scaleTransform(node,scale)
+	node:setScale(osg.Vec3d(scale,scale,scale))
 end
