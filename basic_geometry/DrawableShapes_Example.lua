@@ -4,7 +4,7 @@ require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
 dofile(vrjLua.findInModelSearchPath([[DrawableShapes.lua]]))
-dofile(vrjLua.findInModelSearchPath([[simpleLights.lua]]))
+dofile(vrjLua.findInModelSearchPath([[../simpleLights.lua]]))
 
 
 sphere = DrawableShapes.Sphere{position = {1,1,0},color={1,1,0,1}, radius = .13}
