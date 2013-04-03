@@ -1,10 +1,11 @@
 dofile([[X:\Users\lpberg\src\vrjugglua_scripts_and_models\useful_tools.lua]])
+--default buttons in simSparta are LEFT for select part, and B (trigger for drag/move)
 dofile([[X:\Users\lpberg\src\vrjugglua_scripts_and_models\simSparta.lua]])
 
 loadBasicFactoryWithBasicLighting()
 
 local main_xform = Transform{
-	position = {1,1,1},
+	position = {2,1.5,1.5},
 }
 
 local loadOSGsAndIves = function()
