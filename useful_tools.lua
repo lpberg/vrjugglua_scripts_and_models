@@ -20,6 +20,24 @@ function printUsefulTools()
 	print("\t\t" .. "getLightsaber() - returns lightsaber xform")
 end
 
+getRandomColor = coroutine.wrap(function()
+	while true do
+		coroutine.yield({125/255,0,0})
+		coroutine.yield({0,125/255,0})
+		coroutine.yield({0,0,125/255})
+		coroutine.yield({125/255,125/255,0})
+		coroutine.yield({102/255,51/255,1})
+		coroutine.yield({255/255,251/255,102/255})
+		coroutine.yield({0/255,51/255,102/255})
+		coroutine.yield({255/255,128/255,192/255})
+		coroutine.yield({255/255,105/255,51/255})
+		coroutine.yield({51/255,51/255,51/255})
+		coroutine.yield({102/255,153/255,254/255})
+		coroutine.yield({255/255,103/255,204/255})
+		coroutine.yield({204/255,153/255,104/255})
+	end
+end)
+
 local Stock_Models = {
 	factory = Transform{
 		orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
@@ -79,6 +97,7 @@ function applyBasicLighting()
 	local l1 = osg.Light()
 	l1:setLightNum(1)
 	l1:setAmbient(osg.Vec4(.1, .1, .1, 1.0))
+	l1:setDiffuse(osg.Vec4(.8, .8, .8, 1.0))
 	local ls1 = osg.LightSource()
 	ls1:setLight(l1)
 	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
