@@ -4,14 +4,14 @@ dofile([[X:\Users\lpberg\src\vrjugglua_scripts_and_models\simSparta.lua]])
 
 loadBasicFactoryWithBasicLighting()
 
-local main_xform = Transform{
-	position = {2,1.5,1.5},
-}
+local global_position = {2,1.5,1.5}
+
+local main_xform = Transform{}
 
 local loadOSGsAndIves = function()
 	for i,v in pairs(arg) do
 		if string.find(v,".osg") or string.find(v,".ive") then
-			model_xform = Transform{Model(v)}
+			model_xform = Transform{position = global_position, Model(v)}
 			changeTransformColor(model_xform,getRandomColor())
 			main_xform:addChild(createManipulatableObject(model_xform))
 		end
