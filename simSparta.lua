@@ -57,7 +57,7 @@ function moveAction(dt)
 		dragBtn = gadget.DigitalInterface("VJButton2")
 	else
 		print("Using METaL Defaults")
-		changeBtn = gadget.DigitalInterface("WMButtonLeft")
+		changeBtn = gadget.DigitalInterface("WMButtonRight")
 		dragBtn = gadget.DigitalInterface("WMButtonB")
 	end
 	local wand = gadget.PositionInterface("VJWand")

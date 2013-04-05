@@ -1,5 +1,5 @@
 dofile([[X:\Users\lpberg\src\vrjugglua_scripts_and_models\useful_tools.lua]])
---default buttons in simSparta are LEFT for select part, and B (trigger for drag/move)
+--default buttons in simSparta are RIGHT for select part, and B (trigger for drag/move)
 dofile([[X:\Users\lpberg\src\vrjugglua_scripts_and_models\simSparta.lua]])
 
 loadBasicFactoryWithBasicLighting()
