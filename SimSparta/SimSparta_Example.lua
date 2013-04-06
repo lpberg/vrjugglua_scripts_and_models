@@ -5,7 +5,8 @@ vrjLua.appendToModelSearchPath(getScriptFilename())
 dofile(vrjLua.findInModelSearchPath([[../simSparta.lua]]))
 
 --set up button to change which object is "selected"
-changeBtn = gadget.DigitalInterface("VJButton0")
+nextBtn = gadget.DigitalInterface("VJButton0")
+prevBtn = gadget.DigitalInterface("VJButton1") -- optional
 --set up button to move / drag object about scene
 dragBtn = gadget.DigitalInterface("VJButton2")
 
@@ -21,5 +22,5 @@ local spheres = Transform{
 --add objects to scene
 RelativeTo.World:addChild(createManipulatableObject(spheres))
 
---call SimSparta function to initiate frame action
-SimSparta(dragBtn)
+--call SimSparta function to initiate frame action (prevBtn Optional)
+SimSparta(dragBtn,nextBtn,prevBtn)

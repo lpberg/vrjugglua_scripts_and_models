@@ -47,7 +47,7 @@ local transformMatrixRoomToWorld = function(m)
 	return matrixMult(getRoomToWorld(), m)
 end
 
-local function moveAction(dragBtn,changeBtn)
+local function moveAction(dragBtn,nextBtn,prevBtn)
 
 	local wand = gadget.PositionInterface("VJWand")
 	local activeObject = 1
@@ -59,13 +59,31 @@ local function moveAction(dragBtn,changeBtn)
 	local function frameAction()
 		while true do
 			while not dragBtn.pressed do
-				if changeBtn.justPressed then
+				if nextBtn.justPressed then
+					--turn off scribe effect current node
 					Manipulables_Switches[activeObject]:setSingleChildOn(0)
+					--set active object index increase by one
 					activeObject = activeObject + 1
+					--if obect index greater than number of objects reset to first
 					if activeObject > #Manipulables then
 						activeObject = 1
 					end
+					--set active object scribe on
 					Manipulables_Switches[activeObject]:setSingleChildOn(1)
+				end
+				if prevBtn ~= nil then
+					if prevBtn.justPressed then
+						--turn off scribe effect current node
+						Manipulables_Switches[activeObject]:setSingleChildOn(0)
+						--set active object index decrease by one
+						activeObject = activeObject - 1
+						--if object index less than 1 (0) reset to last
+						if activeObject < 1 then
+							activeObject = #Manipulables
+						end
+						--set active object scribe on
+						Manipulables_Switches[activeObject]:setSingleChildOn(1)
+					end
 				end
 				Actions.waitForRedraw()
 			end
@@ -84,9 +102,9 @@ local function moveAction(dragBtn,changeBtn)
 	return frameAction
 end
 
-function SimSparta(dragBtn,changeBtn)
+function SimSparta(dragBtn,changeBtn,prevBtn)
 	if dragBtn == nil or changeBtn == nil then
-		print("SimSparta: Must pass both valid dragBtn and changeBtn")
+		print("SimSparta: Must pass both valid dragBtn and nextBtn (optionally: prevBtn")
 	else
 		Actions.addFrameAction(moveAction(dragBtn,changeBtn))
 		print("SimSparta: frame action initiated successfully")
