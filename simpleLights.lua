@@ -26,3 +26,4 @@ end
 
 doLight1()
 doLight2()
+print("simpleLights added to scene")
