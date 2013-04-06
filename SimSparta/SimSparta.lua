@@ -102,11 +102,11 @@ local function moveAction(dragBtn,nextBtn,prevBtn)
 	return frameAction
 end
 
-function SimSparta(dragBtn,changeBtn,prevBtn)
-	if dragBtn == nil or changeBtn == nil then
-		print("SimSparta: Must pass both valid dragBtn and nextBtn (optionally: prevBtn")
+function SimSparta(dragBtn,nextBtn,prevBtn)
+	if dragBtn == nil or nextBtn == nil then
+		print("SimSparta: Must pass both valid dragBtn and nextBtn (optionally: prevBtn)")
 	else
-		Actions.addFrameAction(moveAction(dragBtn,changeBtn))
+		Actions.addFrameAction(moveAction(dragBtn,nextBtn,prevBtn))
 		print("SimSparta: frame action initiated successfully")
 	end
 end
