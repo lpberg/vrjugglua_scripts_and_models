@@ -4,6 +4,7 @@ require("osgFX")
 
 local Manipulables = {}
 local Manipulables_Switches = {}
+local initial_matricies = {}
 
 function createManipulatableObject(xform)
 
@@ -27,6 +28,7 @@ function createManipulatableObject(xform)
 	local xform_asMatrixTransform = wrapTransformInMatrixTransform(xform)
 	local xform_asScribeSwitch = wrapTransformInBlueScribeSwitch(xform_asMatrixTransform)
 	table.insert(Manipulables, xform_asMatrixTransform)
+	table.insert(initial_matricies, xform_asMatrixTransform:getMatrix())
 	table.insert(Manipulables_Switches, xform_asScribeSwitch)
 
 	return xform_asScribeSwitch
@@ -47,7 +49,7 @@ local transformMatrixRoomToWorld = function(m)
 	return matrixMult(getRoomToWorld(), m)
 end
 
-local function moveAction(dragBtn,nextBtn,prevBtn)
+local function moveAction(dragBtn,nextBtn,prevBtn,resetBtn)
 
 	local wand = gadget.PositionInterface("VJWand")
 	local activeObject = 1
@@ -85,6 +87,11 @@ local function moveAction(dragBtn,nextBtn,prevBtn)
 						Manipulables_Switches[activeObject]:setSingleChildOn(1)
 					end
 				end
+				if resetBtn ~= nil then
+					if resetBtn.justPressed then
+						node:setMatrix(initial_matricies[activeObject])
+					end
+				end
 				Actions.waitForRedraw()
 			end
 
@@ -102,11 +109,11 @@ local function moveAction(dragBtn,nextBtn,prevBtn)
 	return frameAction
 end
 
-function SimSparta(dragBtn,nextBtn,prevBtn)
+function SimSparta(dragBtn,nextBtn,prevBtn,resetBtn)
 	if dragBtn == nil or nextBtn == nil then
-		print("SimSparta: Must pass both valid dragBtn and nextBtn (optionally: prevBtn)")
+		print("SimSparta: Must pass both valid dragBtn and nextBtn (optionally: prevBtn,resetBtn)")
 	else
-		Actions.addFrameAction(moveAction(dragBtn,nextBtn,prevBtn))
+		Actions.addFrameAction(moveAction(dragBtn,nextBtn,prevBtn,resetBtn))
 		print("SimSparta: frame action initiated successfully")
 	end
 end

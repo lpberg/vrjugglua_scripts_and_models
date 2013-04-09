@@ -23,4 +23,4 @@ local spheres = Transform{
 RelativeTo.World:addChild(createManipulatableObject(spheres))
 
 --call SimSparta function to initiate frame action (prevBtn Optional)
-SimSparta(dragBtn,nextBtn,prevBtn)
+SimSparta(dragBtn,nextBtn,prevBtn,resetBtn)
