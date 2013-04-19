@@ -22,6 +22,12 @@ end
 
 getRandomColor = coroutine.wrap(function()
 	while true do
+		coroutine.yield({153/255,0/255,0/255}) -- RED
+		coroutine.yield({0/255,153/255,153/255}) -- TEAL
+		coroutine.yield({76/255,0/255,153/255}) -- PURPLE
+		coroutine.yield({0/255,153/255,0/255}) -- GREEN
+		coroutine.yield({0/255,0/255,204/255}) -- BLUE
+		coroutine.yield({204/255,204/255,0/255}) -- YELLOW
 		coroutine.yield({98/255,192/255,220/255})
 		coroutine.yield({188/255,166/255,142/255})
 		coroutine.yield({54/255,99/255,120/255})
