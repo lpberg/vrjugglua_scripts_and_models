@@ -49,7 +49,7 @@ local transformMatrixRoomToWorld = function(m)
 	return matrixMult(getRoomToWorld(), m)
 end
 
-local function moveAction(dragBtn,nextBtn,prevBtn,resetBtn)
+local function moveAction(dragBtn, nextBtn, prevBtn, resetBtn)
 
 	local wand = gadget.PositionInterface("VJWand")
 	local activeObject = 1
@@ -57,7 +57,7 @@ local function moveAction(dragBtn,nextBtn,prevBtn,resetBtn)
 	local getWandInWorld = function()
 		return transformMatrixRoomToWorld(wand.matrix)
 	end
-	
+
 	local function frameAction()
 		while true do
 			while not dragBtn.pressed do
@@ -89,6 +89,7 @@ local function moveAction(dragBtn,nextBtn,prevBtn,resetBtn)
 				end
 				if resetBtn ~= nil then
 					if resetBtn.justPressed then
+						local node = Manipulables[activeObject]
 						node:setMatrix(initial_matricies[activeObject])
 					end
 				end
@@ -109,11 +110,11 @@ local function moveAction(dragBtn,nextBtn,prevBtn,resetBtn)
 	return frameAction
 end
 
-function SimSparta(dragBtn,nextBtn,prevBtn,resetBtn)
+function SimSparta(dragBtn, nextBtn, prevBtn, resetBtn)
 	if dragBtn == nil or nextBtn == nil then
 		print("SimSparta: Must pass both valid dragBtn and nextBtn (optionally: prevBtn,resetBtn)")
 	else
-		Actions.addFrameAction(moveAction(dragBtn,nextBtn,prevBtn,resetBtn))
+		Actions.addFrameAction(moveAction(dragBtn, nextBtn, prevBtn, resetBtn))
 		print("SimSparta: frame action initiated successfully")
 	end
 end
