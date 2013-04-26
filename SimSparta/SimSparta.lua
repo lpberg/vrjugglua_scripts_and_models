@@ -58,40 +58,72 @@ local function moveAction(dragBtn, nextBtn, prevBtn, resetBtn)
 		return transformMatrixRoomToWorld(wand.matrix)
 	end
 
+	local function getClosestObject()
+		Manipulables_Switches[activeObject]:setSingleChildOn(0)
+		local minDist = 100000
+		local closestObj = nil
+		local wandPos = getWandInWorld():getTrans()
+		for i = 1, #Manipulables, 1 do
+			local dist = (wandPos - Manipulables[i]:getMatrix():getTrans()):length()
+			if dist < minDist then
+				minDist = dist
+				activeObject = i
+			end
+		end
+		Manipulables_Switches[activeObject]:setSingleChildOn(1)
+	end
+
+
+	local function selectNextObject()
+		--turn off scribe effect current node
+		Manipulables_Switches[activeObject]:setSingleChildOn(0)
+		--set active object index increase by one
+		activeObject = activeObject + 1
+		--if obect index greater than number of objects reset to first
+		if activeObject > #Manipulables then
+			activeObject = 1
+		end
+		--set active object scribe on
+		Manipulables_Switches[activeObject]:setSingleChildOn(1)
+	end
+
+	local function selectPreviousObject()
+		--turn off scribe effect current node
+		Manipulables_Switches[activeObject]:setSingleChildOn(0)
+		--set active object index decrease by one
+		activeObject = activeObject - 1
+		--if object index less than 1 (0) reset to last
+		if activeObject < 1 then
+			activeObject = #Manipulables
+		end
+		--set active object scribe on
+		Manipulables_Switches[activeObject]:setSingleChildOn(1)
+	end
+
+	local function resetPart()
+		local node = Manipulables[activeObject]
+		node:setMatrix(initial_matricies[activeObject])
+	end
+
+	local function checkCycleButtons()
+		if nextBtn.justPressed then
+			selectNextObject()
+		end
+		if prevBtn ~= nil and prevBtn.justPressed then
+			selectPreviousObject()
+		end
+		if resetBtn ~= nil and resetBtn.justPressed then
+			resetPart()
+		end
+	end
+
 	local function frameAction()
 		while true do
 			while not dragBtn.pressed do
-				if nextBtn.justPressed then
-					--turn off scribe effect current node
-					Manipulables_Switches[activeObject]:setSingleChildOn(0)
-					--set active object index increase by one
-					activeObject = activeObject + 1
-					--if obect index greater than number of objects reset to first
-					if activeObject > #Manipulables then
-						activeObject = 1
-					end
-					--set active object scribe on
-					Manipulables_Switches[activeObject]:setSingleChildOn(1)
-				end
-				if prevBtn ~= nil then
-					if prevBtn.justPressed then
-						--turn off scribe effect current node
-						Manipulables_Switches[activeObject]:setSingleChildOn(0)
-						--set active object index decrease by one
-						activeObject = activeObject - 1
-						--if object index less than 1 (0) reset to last
-						if activeObject < 1 then
-							activeObject = #Manipulables
-						end
-						--set active object scribe on
-						Manipulables_Switches[activeObject]:setSingleChildOn(1)
-					end
-				end
-				if resetBtn ~= nil then
-					if resetBtn.justPressed then
-						local node = Manipulables[activeObject]
-						node:setMatrix(initial_matricies[activeObject])
-					end
+				if cycle then
+					checkCycleButtons()
+				else
+					getClosestObject()
 				end
 				Actions.waitForRedraw()
 			end

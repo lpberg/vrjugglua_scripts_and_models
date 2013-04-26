@@ -3,7 +3,7 @@
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 dofile(vrjLua.findInModelSearchPath([[../simSparta.lua]]))
-
+-- cycle=true -- optional cycle through method using buttons
 --set up button to change which object is "selected"
 nextBtn = gadget.DigitalInterface("VJButton0")
 prevBtn = gadget.DigitalInterface("VJButton1") -- optional
@@ -23,4 +23,4 @@ local spheres = Transform{
 RelativeTo.World:addChild(createManipulatableObject(spheres))
 
 --call SimSparta function to initiate frame action (prevBtn Optional)
-SimSparta(dragBtn,nextBtn,prevBtn,resetBtn)
+SimSparta(dragBtn, nextBtn, prevBtn, resetBtn)
