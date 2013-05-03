@@ -20,6 +20,23 @@ function printUsefulTools()
 	print("\t\t" .. "getLightsaber() - returns lightsaber xform")
 end
 
+--recursive function to strip of the beginning and extension of paths
+function stripPathAndExtension(str)
+	slash_location = string.find(str, '\\')
+	if slash_location == nil then
+		str = string.gsub(str, " ", "")
+		str = string.gsub(str, "-", "_")
+		str = string.gsub(str, "__", "_")
+		str = string.gsub(str, ".osg", "")
+		str = string.gsub(str, ".ive", "")
+		str = string.gsub(str, ".STL", "")
+		str = string.gsub(str, ".stl", "")
+		return str
+	else
+		return stripPathAndExtension(string.sub(str, slash_location + 1))
+	end
+end
+
 getRandomColor = coroutine.wrap(function()
 	while true do
 		coroutine.yield({153/255,0/255,0/255}) -- RED
