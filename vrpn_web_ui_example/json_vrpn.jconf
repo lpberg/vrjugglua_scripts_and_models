@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?org-vrjuggler-jccl-settings configuration.version="3.0"?>
+<configuration xmlns="http://www.vrjuggler.org/jccl/xsd/3.0/configuration" name="C:\Users\lpberg\Desktop\json_vrpn2.jconf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vrjuggler.org/jccl/xsd/3.0/configuration http://www.vrjuggler.org/jccl/xsd/3.0/configuration.xsd">
+   <elements>
+      <vrpn name="VRPN_JSON" version="2">
+         <tracker_server>Jsonnet@127.0.0.1</tracker_server>
+         <button_server>Jsonnet@127.0.0.1</button_server>
+         <analog_server>Jsonnet@127.0.0.1</analog_server>
+         <tracker_count>0</tracker_count>
+         <button_count>100</button_count>
+         <analog_count>128</analog_count>
+         <min>0</min>
+         <max>1</max>
+      </vrpn>
+      <input_manager name="VRPN Manager" version="2">
+         <driver>VRPN_drv</driver>
+      </input_manager>
+      <vrpntext name="JSTextServer" version="1">
+         <device>Jsonnet@127.0.0.1</device>
+      </vrpntext>
+	   <string_proxy name="JSText" version="1">
+         <device>JSTextServer</device>
+         <unit>0</unit>
+      </string_proxy>
+      <digital_proxy name="JSButton0" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>0</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton1" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>1</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton2" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>2</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton3" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>3</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton4" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>4</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton5" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>5</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton6" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>6</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton7" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>7</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton8" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>8</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton9" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>9</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton10" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>10</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton11" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>11</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton12" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>12</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton13" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>13</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton14" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>14</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton15" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>15</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton16" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>16</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton17" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>17</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton18" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>18</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton19" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>19</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton20" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>20</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton21" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>21</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton22" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>22</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton23" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>23</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton24" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>24</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton25" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>25</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton26" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>26</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton27" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>27</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton28" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>28</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton29" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>29</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton30" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>30</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton31" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>31</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton32" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>32</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton33" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>33</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton34" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>34</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton35" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>35</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton36" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>36</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton37" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>37</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton38" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>38</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton39" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>39</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton40" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>40</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton41" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>41</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton42" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>42</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton43" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>43</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton44" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>44</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton45" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>45</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton46" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>46</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton47" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>47</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton48" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>48</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton49" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>49</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton50" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>50</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton51" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>51</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton52" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>52</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton53" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>53</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton54" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>54</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton55" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>55</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton56" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>56</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton57" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>57</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton58" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>58</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton59" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>59</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton60" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>60</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton61" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>61</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton62" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>62</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton63" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>63</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton64" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>64</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton65" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>65</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton66" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>66</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton67" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>67</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton68" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>68</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton69" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>69</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton70" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>70</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton71" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>71</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton72" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>72</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton73" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>73</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton74" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>74</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton75" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>75</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton76" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>76</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton77" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>77</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton78" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>78</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton79" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>79</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton80" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>80</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton81" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>81</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton82" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>82</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton83" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>83</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton84" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>84</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton85" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>85</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton86" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>86</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton87" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>87</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton88" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>88</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton89" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>89</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton90" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>90</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton91" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>91</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton92" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>92</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton93" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>93</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton94" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>94</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton95" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>95</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton96" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>96</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton97" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>97</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton98" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>98</unit>
+      </digital_proxy>
+      <digital_proxy name="JSButton99" version="1">
+	      <device>VRPN_JSON</device>
+	      <unit>99</unit>
+      </digital_proxy>
+      <analog_proxy name="JSAnalog0" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>0</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog1" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>1</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog2" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>2</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog3" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>3</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog4" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>4</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog5" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>5</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog6" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>6</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog7" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>7</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog8" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>8</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog9" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>9</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog10" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>10</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog11" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>11</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog12" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>12</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog13" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>13</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog14" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>14</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog15" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>15</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog16" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>16</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog17" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>17</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog18" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>18</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog19" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>19</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog20" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>20</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog21" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>21</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog22" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>22</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog23" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>23</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog24" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>24</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog25" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>25</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog26" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>26</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog27" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>27</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog28" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>28</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog29" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>29</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog30" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>30</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog31" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>31</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog32" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>32</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog33" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>33</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog34" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>34</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog35" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>35</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog36" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>36</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog37" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>37</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog38" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>38</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog39" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>39</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog40" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>40</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog41" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>41</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog42" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>42</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog43" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>43</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog44" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>44</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog45" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>45</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog46" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>46</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog47" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>47</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog48" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>48</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog49" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>49</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog50" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>50</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog51" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>51</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog52" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>52</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog53" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>53</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog54" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>54</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog55" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>55</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog56" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>56</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog57" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>57</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog58" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>58</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog59" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>59</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog60" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>60</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog61" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>61</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog62" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>62</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog63" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>63</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog64" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>64</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog65" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>65</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog66" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>66</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog67" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>67</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog68" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>68</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog69" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>69</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog70" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>70</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog71" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>71</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog72" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>72</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog73" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>73</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog74" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>74</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog75" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>75</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog76" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>76</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog77" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>77</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog78" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>78</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog79" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>79</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog80" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>80</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog81" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>81</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog82" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>82</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog83" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>83</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog84" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>84</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog85" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>85</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog86" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>86</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog87" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>87</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog88" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>88</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog89" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>89</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog90" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>90</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog91" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>91</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog92" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>92</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog93" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>93</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog94" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>94</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog95" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>95</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog96" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>96</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog97" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>97</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog98" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>98</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog99" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>99</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog100" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>100</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog101" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>101</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog102" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>102</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog103" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>103</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog104" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>104</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog105" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>105</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog106" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>106</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog107" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>107</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog108" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>108</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog109" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>109</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog110" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>110</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog111" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>111</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog112" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>112</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog113" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>113</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog114" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>114</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog115" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>115</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog116" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>116</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog117" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>117</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog118" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>118</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog119" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>119</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog120" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>120</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog121" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>121</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog122" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>122</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog123" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>123</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog124" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>124</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog125" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>125</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog126" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>126</unit>
+      </analog_proxy>
+      <analog_proxy name="JSAnalog127" version="1">
+	     <device>VRPN_JSON</device>
+	     <unit>127</unit>
+      </analog_proxy>
+   </elements>
+</configuration>
+
