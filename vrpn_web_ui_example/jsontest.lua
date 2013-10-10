@@ -3,52 +3,45 @@ require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 vrjKernel.loadConfigFile(vrjLua.findInModelSearchPath([[json_vrpn.jconf]]))
 
-local function recieveString()
+local function textListener(actionFunction)
 	strings = gadget.StringInterface("JSText")
 	Actions.addFrameAction(function()
 			while true do
 				newData = strings.data
 				if newData ~= "" then
-					print("New String Recieved: ", newData)
+					actionFunction(newData)
 				end
 				Actions.waitForRedraw()
 			end
 		end)
 end
 
-recieveString()
+local function printNewDataValue()
+	local function f(newData)
+		print(newData)
+	end
+end
 
-local function recieveAnalog0()
-	local input = gadget.AnalogInterface("JSAnalog0")
+
+textListener(printNewDataValue())
+
+local function analogListener(str)
+	local input = gadget.AnalogInterface(str)
 	Actions.addFrameAction(function()
 			local last_value = ""
 			while true do
 				local newData = input.data
 				if newData ~= nil and newData ~= last_value then
-					print("New Analog Value Recieved on JSAnalog0: ", newData)
+					print("new analog value recieved on "..str..": ", newData)
 					last_value = newData
 				end
 				Actions.waitForRedraw()
 			end
 		end)
 end
-recieveAnalog0()
 
-local function recieveAnalog10()
-	local input = gadget.AnalogInterface("JSAnalog10")
-	Actions.addFrameAction(function()
-			local last_value = ""
-			while true do
-				local newData = input.data
-				if newData ~= nil and newData ~= last_value then
-					print("New Analog Value Recieved on JSAnalog10: ", newData)
-					last_value = newData
-				end
-				Actions.waitForRedraw()
-			end
-		end)
-end
-recieveAnalog10()
+analogListener("JSAnalog1")
+analogListener("JSAnalog2")
 
 
 local function doWhen(condition, actionToTake)
