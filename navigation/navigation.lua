@@ -18,6 +18,10 @@ end
 
 function FlyOrWalkNavigationIndex:startWalking()
 	Actions.removeFrameAction(self.flying_frame_action_marker)
+	if self.dropToGroundWhenWalking then
+		local world_height = RelativeTo.World:getMatrix():getTrans():y()
+		RelativeTo.World:preMult(osg.Matrixd.translate(0, -world_height, 0))
+	end
 	self.walking_frame_action_marker = Actions.addFrameAction(self.walk_frame_action)
 	print("FlyOrWalkNavigation: Walking Mode Started")
 end
@@ -63,17 +67,34 @@ function FlyOrWalkNavigationIndex:setup()
 			end
 		end
 	end
-	self.switch_frame_action = function()
-		while true do
-			repeat
-				Actions.waitForRedraw()
-			until self.switchButton.justPressed
-			self:startWalking()
-			repeat
-				Actions.waitForRedraw()
-			until self.switchButton.justPressed
-			self:startFlying()
+	if self.start == "flying" then
+		self.switch_frame_action = function()
+			while true do
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startWalking()
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startFlying()
+			end
 		end
+		self:startFlying()
+	else --if not flying then walking
+		self.switch_frame_action = function()
+			while true do
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startFlying()
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startWalking()
+			end
+		end
+		self:startWalking()
 	end
 	self.rotation_frame_action = function()
 		local function getWandForwardVectorWithoutY()
@@ -82,13 +103,13 @@ function FlyOrWalkNavigationIndex:setup()
 		while true do
 			repeat
 				dt = Actions.waitForRedraw()
-			until self.initiateRotationButton.pressed
+			until self.initiateRotationButton1.pressed or self.initiateRotationButton2.pressed
 
 			local initialWandForwardVector = getWandForwardVectorWithoutY()
 			local maximumRotation = osg.Quat()
 			local incrementalRotation = osg.Quat()
 
-			while self.initiateRotationButton.pressed do
+			while self.initiateRotationButton1.pressed or self.initiateRotationButton2.pressed do
 				local dt = Actions.waitForRedraw()
 				local newForwardVec = getWandForwardVectorWithoutY()
 				maximumRotation:makeRotate(newForwardVec, initialWandForwardVector)
@@ -107,6 +128,8 @@ end
 FlyOrWalkNavigation = function(nav)
 	print("FlyOrWalkNavigation: removing standard navigation...")
 	osgnav.removeStandardNavigation()
+	nav.start = nav.start or "flying"
+	nav.dropToGroundWhenWalking = nav.dropToGroundWhenWalking or true
 	nav.rate = nav.rate or 1.5
 	nav.rotRate = nav.rotRate or .5
 	nav.device = nav.device or gadget.PositionInterface('VJWand')
@@ -114,7 +137,6 @@ FlyOrWalkNavigation = function(nav)
 	nav.head = nav.head or gadget.PositionInterface("VJHead")
 	setmetatable(nav, FlyOrWalkNavigationMT)
 	nav:setup()
-	nav:startFlying()
 	
 	if nav.switchButton ~= nil then
 		nav:addSwitchButtonActionFrame()
@@ -122,10 +144,11 @@ FlyOrWalkNavigation = function(nav)
 		print("FlyOrWalkNavigation: No switchButton provided, won't be able to switch to walking mode")
 	end
 	
-	if nav.initiateRotationButton ~= nil then
+	if nav.initiateRotationButton1 ~= nil then
+		nav.initiateRotationButton2 = nav.initiateRotationButton2 or nav.initiateRotationButton1
 		nav:startRotating()
 	else
-		print("FlyOrWalkNavigation: No initiateRotationButton provided, you won't be able to rotate")
+		print("FlyOrWalkNavigation: No initiateRotationButton1 provided, you won't be able to rotate")
 	end
 
 	return nav
