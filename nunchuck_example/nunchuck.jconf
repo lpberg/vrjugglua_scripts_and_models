@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?org-vrjuggler-jccl-settings configuration.version="3.0"?>
+<configuration xmlns="http://www.vrjuggler.org/jccl/xsd/3.0/configuration" name="mixins/METaL.wiimotewandbuttons.jconf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vrjuggler.org/jccl/xsd/3.0/configuration http://www.vrjuggler.org/jccl/xsd/3.0/configuration.xsd">
+   <elements>
+      <vrpn name="VRPNWiimote" version="2">
+         <tracker_server>WiiMote0@lapras.student.iastate.edu</tracker_server>
+         <button_server>WiiMote0@lapras.student.iastate.edu</button_server>
+         <analog_server>WiiMote0@lapras.student.iastate.edu</analog_server>
+         <tracker_count>0</tracker_count>
+         <button_count>15</button_count>
+         <analog_count>24</analog_count>
+         <!-- This was set to use the Joystick Magnitude as the Linear Encoder input. -->
+          <!-- Commenting min and max out as they conflict with analog input -->
+         <!--<min>0.0</min> -->
+         <!--<max>1.4</max> -->
+      </vrpn>
+      <input_manager name="VRPN Wiimote Input Manager" version="2">
+         <driver>VRPN_drv</driver>
+      </input_manager>
+      <digital_proxy name="WMButtonHome" version="1">
+         <device>VRPNWiimote</device>
+         <unit>0</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButton1" version="1">
+         <device>VRPNWiimote</device>
+         <unit>1</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButton2" version="1">
+         <device>VRPNWiimote</device>
+         <unit>2</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonA" version="1">
+         <device>VRPNWiimote</device>
+         <unit>3</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonB" version="1">
+         <device>VRPNWiimote</device>
+         <unit>4</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonMinus" version="1">
+         <device>VRPNWiimote</device>
+         <unit>5</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonPlus" version="1">
+         <device>VRPNWiimote</device>
+         <unit>6</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonLeft" version="1">
+         <device>VRPNWiimote</device>
+         <unit>7</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonRight" version="1">
+         <device>VRPNWiimote</device>
+         <unit>8</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonDown" version="1">
+         <device>VRPNWiimote</device>
+         <unit>9</unit>
+      </digital_proxy>
+      <digital_proxy name="WMButtonUp" version="1">
+         <device>VRPNWiimote</device>
+         <unit>10</unit>
+      </digital_proxy>
+      <analog_proxy name="WMNunchukJoystickMagnitude" version="1">
+         <device>VRPNWiimote</device>
+         <unit>20</unit>
+      </analog_proxy>
+      <analog_proxy name="WMNunchukJoystickX" version="1">
+         <device>VRPNWiimote</device>
+         <unit>21</unit>
+      </analog_proxy>
+      <analog_proxy name="WMNunchukJoystickY" version="1">
+         <device>VRPNWiimote</device>
+         <unit>22</unit>
+      </analog_proxy>
+      <alias name="VJButton0" version="1">
+         <proxy>WMButtonA</proxy>
+      </alias>
+      <alias name="VJButton1" version="1">
+         <proxy>WMButtonB</proxy>
+      </alias>
+      <alias name="VJButton2" version="1">
+         <proxy>WMButtonHome</proxy>
+      </alias>
+   </elements>
+</configuration>
