@@ -18,6 +18,8 @@ teapot = Transform{
 cp = ClipPlanes{
 	node = teapot,
 	enabled_Z = false,
+	alpha = .05,
+	planeHints = true,
 }
 
 RelativeTo.World:addChild(cp.parent)
