@@ -7,12 +7,12 @@ runfile([[../simpleLights.lua]])
 runfile([[../transitionEffects.lua]])
 
 --add a room
-factory = Transform{
-	orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
-	scale = ScaleFrom.inches,
-	Model([[../models/misc/basicfactory.ive]])
-}
-RelativeTo.World:addChild(factory)
+-- factory = Transform{
+	-- orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
+	-- scale = ScaleFrom.inches,
+	-- Model([[../models/misc/basicfactory.ive]])
+-- }
+-- RelativeTo.World:addChild(factory)
 
 function fun()
 	print ("we are all having fun!")
