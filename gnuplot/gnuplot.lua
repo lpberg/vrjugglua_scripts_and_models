@@ -32,6 +32,8 @@ Plot = function(plot)
 	plot.width = plot.width or 900
 	setmetatable(plot, PMT)
 	plot:createCmd()
-	plot.pipe = assert(io.popen(plot.cmd, "w"))
+	print(plot.cmd)
+	-- plot.pipe = assert(io.popen(plot.cmd, "w"))
+	plot.pipe = assert(io.popen(plot.cmd))
 	return plot
 end

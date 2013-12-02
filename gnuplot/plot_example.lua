@@ -1,10 +1,12 @@
+require "AddAppDirectory"
 require("getScriptFilename")
-vrjLua.appendToModelSearchPath(getScriptFilename())
-dofile(vrjLua.findInModelSearchPath([[gnuplot.lua]]))
+AddAppDirectory()
+runfile[[gnuplot.lua]]
 
 math.randomseed(os.time())
 
 local filename = string.match(getScriptFilename(), "(.-)([^\\]-([^%.]+))$").."my"..".png"
+print(filename)
 
 function lineExample()
 	--create plot
@@ -48,5 +50,5 @@ end
 
 barExample()
 
-barExample()
-lineExample()
+-- barExample()
+-- lineExample()
