@@ -9,11 +9,11 @@ local getRoomToWorld = function()
 end
 
 local transformPointRoomToWorld = function(v)
-	return getRoomToWorld():preMult(v)
+	return v * getRoomToWorld()
 end
 
 local transformDirectionRoomToWorld = function(v)
-	return getRoomToWorld():preMult(osg.Vec4d(v, 0))
+	return osg.Vec4d(v, 0) * getRoomToWorld()
 end
 
 function FlyOrWalkNavigationIndex:startWalking()
