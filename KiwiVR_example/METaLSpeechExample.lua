@@ -1,12 +1,18 @@
 require("AddAppDirectory")
 AddAppDirectory()
 runfile[[kiwiVRConfigCreator.lua]]
-runfile([[../message_loader/setMessageText.lua]])
+
+--- tips for using voice in METaL
+-- 		make sure no Navtestbed processes are still running
+-- 		RDP should be configured to leave audio on remote machine and pass plug and play devices (?)
+-- 		when loading jconfs make sure to load the metal one you want as well
 
 --load in a configuration file to talk to the voice server
+--? - why do we have to load both, shouldn't launcher take care of one?
 vrjKernel.loadConfigFile(vrjLua.findInModelSearchPath([[VRPNText.jconf]]))
+vrjKernel.loadConfigFile(vrjLua.findInModelSearchPath([[s:/jconf30/METaL.tracked.stereo.reordered.withwandandhand.jconf]]))
 
---list of words to recognize
+--list of words to recognize with confidence numbers
 local mywords = {
 	{"hello",.85},
 	{"goodbye",.11},
@@ -14,21 +20,21 @@ local mywords = {
 	{"cat",.51},
 	{"bears",.81},
 }
---create the config file and store it on S: drive
+
+--create the config file and store it on S: drive (for metal win7 server)
 my_config_file = createKiwiVRConfigFile{
 	words = mywords,
 	fullPathFileName = [[S:\ProjectsCurrent\KiwiVRConfigFiles\custom.xml]],
-	--servername must match jconf being used
 	servername = "Tracker00",
 }
 
+--action frame to print message to screen
 Actions.addFrameAction(function()
 	local speech_device = gadget.StringInterface("KinectProxy")
 	while true do
-		for _,word in ipairs(mywords) do
-			if speech_device.data == word[1] then
-				setMessageText(" You said "..word[1], 1)
-			end
+		local message = speech_device.data
+		if #message > 0 then
+			print("You said "..message)
 		end
 		Actions.waitForRedraw()
 	end
