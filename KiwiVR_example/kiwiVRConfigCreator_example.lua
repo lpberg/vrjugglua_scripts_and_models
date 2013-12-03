@@ -13,5 +13,7 @@ my_config_file = createKiwiVRConfigFile{
 		{"bears",.81},
 	},
 	outfile = "myXML",
-	servername = "VRPN_Voice1",
+	-- or
+	-- fullPathFileName = "full/path/here"
+	servername = "Tracker00",
 }

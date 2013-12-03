@@ -47,9 +47,13 @@ end
 function createKiwiVRConfigFile(a)
 	assert(a.words, 'Must pass words.')
 	a.outfile = a.outfile or "outfile.xml"
-	a.filenameInThisDir = string.match(getScriptFilename(), "(.-)([^\\]-([^%.]+))$") .. a.outfile..".xml"
+	if a.fullPathFileName then
+	a.filenameInThisDir = a.fullPathFileName
+	else
+		a.filenameInThisDir = string.match(getScriptFilename(), "(.-)([^\\]-([^%.]+))$") .. a.outfile..".xml"
+	end
 	a.file = assert(io.open(a.filenameInThisDir, "w"))
-	a.servername = a.servername or "KVRPN_Tracker00"
+	a.servername = a.servername or "Tracker00"
 	filestr = _firstString
 	for _,t in ipairs(a.words) do
 		local nextPart = _makeMiddlePart(t[1],t[2],a.servername)
