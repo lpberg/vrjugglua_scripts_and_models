@@ -1,27 +1,21 @@
 -- Useful tools and various functions
-require("osgFX")
-require("getScriptFilename")
-vrjLua.appendToModelSearchPath(getScriptFilename())
 
-function printUsefulTools()
+UsefulTools = {}
+
+function UsefulTools.printUsefulTools()
+	print("__________________________")
 	print("Functions in UsefulTools: ")
-	print("\t\t" .. "addToWorld(xform)")
-	print("\t\t" .. "wrapTransformInBlueScribeSwitch(xform)")
-	print("\t\t" .. "wrapTransformInMatrixTransform(xform)")
-	print("\t\t" .. "getRoomToWorld()")
-	print("\t\t" .. "matrixMult(a,b)")
-	print("\t\t" .. "transformMatrixRoomToWorld(matrix)")
-	print("\t\t" .. "applyBasicLighting()")
-	print("\t\t" .. "changeTransformColor(xform,{r/255,g/255,b/255})")
-	print("\t\t" .. "getBasicFactory() - returns xform")
-	print("\t\t" .. "loadBasicFactory() - adds it to World")
-	print("\t\t" .. "loadBasicFactoryWithBasicLighting()")
-	print("\t\t" .. "getSimpleBunny() - returns bunny xform")
-	print("\t\t" .. "getLightsaber() - returns lightsaber xform")
+	print("		addToWorld(xform)")
+	print("		getRandomColor() --> {r,g,b,a}")
+	print("		wrapTransformInBlueScribeSwitch(xform)")
+	print("		wrapTransformInMatrixTransform(xform)")
+	print("		transformMatrixRoomToWorld(matrix)")
+	print("		changeTransformColor(xform,{r/255,g/255,b/255})")
+	print("__________________________")
 end
 
 --recursive function to strip of the beginning and extension of paths
-function stripPathAndExtension(str)
+function UsefulTools.stripPathAndExtension(str)
 	slash_location = string.find(str, '\\')
 	if slash_location == nil then
 		str = string.gsub(str, " ", "")
@@ -33,11 +27,11 @@ function stripPathAndExtension(str)
 		str = string.gsub(str, ".stl", "")
 		return str
 	else
-		return stripPathAndExtension(string.sub(str, slash_location + 1))
+		return UsefulTools.stripPathAndExtension(string.sub(str, slash_location + 1))
 	end
 end
 
-getRandomColor = coroutine.wrap(function()
+UsefulTools.getRandomColor = coroutine.wrap(function()
 	while true do
 		coroutine.yield({153/255,0/255,0/255}) -- RED
 		coroutine.yield({0/255,153/255,153/255}) -- TEAL
@@ -75,29 +69,12 @@ getRandomColor = coroutine.wrap(function()
 		coroutine.yield({204/255,153/255,104/255})
 	end
 end)
-
-local Stock_Models = {
-	factory = Transform{
-		orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
-		scale = ScaleFrom.inches,
-		Model(vrjLua.findInModelSearchPath([[/models/basicfactory.ive]]))
-	},
-	bunny = Transform{
-		orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
-		scale = ScaleFrom.inches,
-		Model(vrjLua.findInModelSearchPath([[/models/bunny.osg]]))
-	},
-	lightsaber = Transform{
-		scale = ScaleFrom.inches * 1.5,
-		Model(vrjLua.findInModelSearchPath([[/models/lightsaber.osg]]))
-	},
-}
-
-function addToWorld(xform)
+function UsefulTools.addToWorld(xform)
 	RelativeTo.World:addChild(xform)
 end
 
-function wrapTransformInBlueScribeSwitch(xform)
+function UsefulTools.wrapTransformInBlueScribeSwitch(xform)
+	require("osgFX")
 	local switch = osg.Switch()
 	local scribe = osgFX.Scribe()
 	scribe:setWireframeColor(osg.Vec4f(0, 0, 1, 1))
@@ -108,33 +85,21 @@ function wrapTransformInBlueScribeSwitch(xform)
 	return switch
 end
 
-function wrapTransformInMatrixTransform(xform)
+function UsefulTools.wrapTransformInMatrixTransform(xform)
 	local MT = osg.MatrixTransform()
 	MT:addChild(xform)
 	return MT
 end
 
-local getRoomToWorld = function()
+function UsefulTools.getRoomToWorld()
 	return RelativeTo.World:getInverseMatrix()
 end
 
---- This is a HIDEOUS HACK @todo
-local matrixMult = function(a, b)
-	local copyOfA = osg.Matrixd(a)
-	copyOfA:preMult(b)
-	return copyOfA
+function UsefulTools.transformMatrixFromRoomToWorld(m)
+	return m * RelativeTo.World:getInverseMatrix()
 end
 
-local transformMatrixRoomToWorld = function(m)
-	return matrixMult(getRoomToWorld(), m)
-end
-
-
-function applyBasicLighting()
-	dofile(vrjLua.findInModelSearchPath([[simpleLights.lua]]))
-end
-
-function changeTransformColor(xform, color)
+function UsefulTools.changeNodeColor(xform, color)
 	local mat = osg.Material()
 	mat:setColorMode(0x1201);
 	mat:setAmbient (0x0408, osg.Vec4(color[1], color[2], color[3], 1.0))
@@ -145,36 +110,10 @@ function changeTransformColor(xform, color)
 	ss:setAttributeAndModes(mat, osg.StateAttribute.Values.ON+osg.StateAttribute.Values.OVERRIDE);
 end
 
-function getBasicFactory()
-	local factory = Transform{
-		orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
-		scale = ScaleFrom.inches,
-		Model(vrjLua.findInModelSearchPath([[/models/basicfactory.ive]]))
-	}
-	return factory
-end
-
-function loadBasicFactory()
-	RelativeTo.World:addChild(getBasicFactory())
-end
-
-function loadBasicFactoryWithBasicLighting()
-	loadBasicFactory()
-	applyBasicLighting()
-end
-
-function getSimpleBunny()
-	return Stock_Models.bunny
-end
-
-function getLightsaber()
-	return Stock_Models.lightsaber
-end
-
-function loadSkyBoxWithBasicLighting()
-	dofile(vrjLua.findInModelSearchPath([[environments/skybox/loadSkybox.lua]]))
-end
-
-function scaleTransform(node,scale)
+function UsefulTools.scaleTransform(node,scale)
 	node:setScale(osg.Vec3d(scale,scale,scale))
 end
+
+-- function UsefulTools.applyBasicLighting()
+	-- dofile(vrjLua.findInModelSearchPath([[simpleLights.lua]]))
+-- end
