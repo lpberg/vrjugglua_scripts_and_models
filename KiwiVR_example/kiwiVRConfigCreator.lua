@@ -44,11 +44,12 @@ local function _makeMiddlePart(word,confidence,servername)
 		</VoiceTextCommand>
 	]]
 end
+
 function createKiwiVRConfigFile(a)
 	assert(a.words, 'Must pass words.')
 	a.outfile = a.outfile or "outfile.xml"
 	if a.fullPathFileName then
-	a.filenameInThisDir = a.fullPathFileName
+		a.filenameInThisDir = a.fullPathFileName
 	else
 		a.filenameInThisDir = string.match(getScriptFilename(), "(.-)([^\\]-([^%.]+))$") .. a.outfile..".xml"
 	end

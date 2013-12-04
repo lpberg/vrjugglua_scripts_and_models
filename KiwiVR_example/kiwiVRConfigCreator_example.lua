@@ -13,7 +13,6 @@ my_config_file = createKiwiVRConfigFile{
 		{"bears",.81},
 	},
 	outfile = "myXML",
-	-- or
 	-- fullPathFileName = "full/path/here"
 	servername = "Tracker00",
 }

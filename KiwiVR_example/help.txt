@@ -1,0 +1,4 @@
+--- tips for using voice in METaL
+-- 		make sure no Navtestbed processes are still running
+-- 		RDP should be configured to leave audio on remote machine and pass plug and play devices (?)
+-- 		when loading jconfs make sure to load the metal one you want as well
