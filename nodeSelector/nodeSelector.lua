@@ -1,6 +1,11 @@
 require("osgFX")
 
-function changeNodeColor(xform, color)
+--BEGIN NODESELECTOR "CLASS"
+
+local nodeSelectorIndex = { isnodeSelector = true }
+local nodeSelectorMT = {__index = nodeSelectorIndex}
+
+function nodeSelectorIndex:changeNodeColor(xform, color)
 	local mat = osg.Material()
 	mat:setColorMode(0x1201);
 	mat:setAmbient (0x0408, osg.Vec4(color[1], color[2], color[3], 1.0))
@@ -11,37 +16,20 @@ function changeNodeColor(xform, color)
 	ss:setAttributeAndModes(mat, osg.StateAttribute.Values.ON+osg.StateAttribute.Values.OVERRIDE);
 end
 
-function hasChildren(node)
-	if node:getNumChildren() > 0 then
-		return true
-	else
-		return false
-	end
-end
-
-local function hasMoreThanOneChild(node)
-	if node:getNumChildren() > 1 then
-		return true
-	else
-		return false
-	end
-end
-
-local function printType(node)
-	return osgLua.getTypeInfo(node).name
-end
-
-local function isManipulatable(node)
+function nodeSelectorIndex:isManipulatable(node)
 	local condition1 = osgLua.getTypeInfo(node).name == [[osg::PositionAttitudeTransform]]
 	local condition2 = osgLua.getTypeInfo(node).name == [[osg::MatrixTransform]]
 	local condition3 = osgLua.getTypeInfo(node).name == [[osg::Group]]
 	return condition1 or condition2 or condition3
 end
 
---BEGIN NODESELECTOR "CLASS"
-
-local nodeSelectorIndex = { isnodeSelector = true }
-local nodeSelectorMT = {__index = nodeSelectorIndex}
+function nodeSelectorIndex:isTraversable(node)
+	local condition1 = osgLua.getTypeInfo(node).name == [[osg::PositionAttitudeTransform]]
+	local condition2 = osgLua.getTypeInfo(node).name == [[osg::MatrixTransform]]
+	local condition3 = osgLua.getTypeInfo(node).name == [[osg::Group]]
+	local condition4 = osgLua.getTypeInfo(node).name == [[osgFX::Scribe]]
+	return condition1 or condition2 or condition3 or condition4
+end
 
 function nodeSelectorIndex:updateCoroutine()
 	self.co = coroutine.create(function ()
@@ -62,7 +50,7 @@ function nodeSelectorIndex:highlightNode(xform)
 		scribe:setWireframeColor(osg.Vec4f(1, 1, 0, 0))
 	else
 		scribe = Transform{}
-		changeNodeColor(scribe,{1,1,0})
+		self:changeNodeColor(scribe,{1,1,0})
 	end
 	scribe:addChild(xform)
 	parent:addChild(scribe)
@@ -70,13 +58,13 @@ end
 
 function nodeSelectorIndex:isTopOfSnake(node)
 	local nodeType = osgLua.getTypeInfo(node).name
-	if nodeType == [[osg::LOD]] then
+	if not self:isTraversable(node) then
 		return true
 	end
-	if hasMoreThanOneChild(node) then
+	if node:getNumChildren() > 1 then
 		return false
 	else
-		self:isTopOfSnake(node.Child[1])
+		return self:isTopOfSnake(node.Child[1])
 	end
 end
 
@@ -87,13 +75,12 @@ function nodeSelectorIndex:unhighlightNode(xform)
 	parent:addChild(xform)
 end
 
-
 function nodeSelectorIndex:setNodeColorYellow(node)
 	local scribe = node:getParent(0)
 	if self.wireFrame then
 		scribe:setWireframeColor(osg.Vec4(1,1,0,1))
 	else
-		changeNodeColor(scribe,{1,1,0})
+		self:changeNodeColor(scribe,{1,1,0})
 	end
 end
 
@@ -102,7 +89,7 @@ function nodeSelectorIndex:setNodeColorBlue(node)
 	if self.wireFrame then
 		scribe:setWireframeColor(osg.Vec4(0,0,1,1))
 	else
-		changeNodeColor(scribe,{0,0,1})
+		self:changeNodeColor(scribe,{0,0,1})
 	end	
 end
 
@@ -138,7 +125,6 @@ function nodeSelectorIndex:selectNextChild()
 	self:setNodeColorBlue(self.selectedNode)
 end
 
-
 function nodeSelectorIndex:moveUp()
 	if self.level > 1 then
 		--set current parent to be "selected node"	
@@ -161,7 +147,7 @@ function nodeSelectorIndex:moveUp()
 end
 
 function nodeSelectorIndex:moveDown()
-	if isManipulatable(self.selectedNode) and not self:isTopOfSnake(self.selectedNode) then
+	if self:isManipulatable(self.selectedNode) and not self:isTopOfSnake(self.selectedNode) then
 		--remove highlighting from current parent
 		self:unhighlightChildrenYellow(self.parent)
 		--update parent to be the "grand" parent node
@@ -176,8 +162,6 @@ function nodeSelectorIndex:moveDown()
 		print("cannot go down any farther!")
 	end
 end
-
-
 
 nodeSelector = function(item)
 	assert(item.parent,"must pass a node in ")
