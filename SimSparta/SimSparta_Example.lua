@@ -17,6 +17,8 @@ local sphere2 = MatrixTransform{
 SimSparta{
 	sphere1,
 	sphere2,
+	disableX = true,
+	disableZ = true,
 	cycleThroughParts = false,
 	dragBtn = gadget.DigitalInterface("VJButton2"),
 }

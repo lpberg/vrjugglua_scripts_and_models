@@ -138,6 +138,14 @@ function SimSpartaIndex:addFrameActions()
 				end
 				if self.dragBtn.pressed then
 					local new_mat = nodeRelativeToWand * self:_getWandInWorld()
+					local new_mat_trans = new_mat:getTrans()
+					local x = new_mat_trans:x()
+					local y = new_mat_trans:y()
+					local z = new_mat_trans:z()
+					if self.disableX then x = 0 end
+					if self.disableY then y = 0 end
+					if self.disableZ then z = 0 end
+					new_mat:setTrans(x,y,z)
 					self:_setMatrix(node, new_mat)
 				end
 				Actions.waitForRedraw()
