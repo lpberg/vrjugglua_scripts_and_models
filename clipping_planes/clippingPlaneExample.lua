@@ -6,7 +6,7 @@ runfile[[ClipPlanes.lua]]
 
 --create sample geometry
 teapot = Transform{
-	position = {0,0,0},
+	position = {1.5,1.5,2},
 	orientation = AngleAxis(Degrees(90),Axis{1.0,0.0,0.0}),
 	Transform{
 		scale = .45,
