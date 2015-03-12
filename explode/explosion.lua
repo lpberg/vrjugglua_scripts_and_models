@@ -4,7 +4,7 @@ AddAppDirectory()
 
 local function createExplosionModel(pos)
 	local xform = Transform{
-		position = {0,0,0},
+		position = pos,
 		scale = 5,
 		Model[[explosion.ive]],
 	}
@@ -35,19 +35,6 @@ function explode(pos)
 		explodeObject(pos, math.random(100,500)/1000) 
     end
 end
-
-Actions.addFrameAction(
-	function()
-		local trigger = gadget.DigitalInterface("VJButton2")
-		while true do
-			while not trigger.justPressed do
-				Actions.waitForRedraw()
-			end
-			explode({0,0,0})
-			Actions.waitForRedraw()
-		end
-	end
-)
 
 
 
