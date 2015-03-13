@@ -3,10 +3,17 @@ require("AddAppDirectory")
 AddAppDirectory()
 
 --include proximityAction and explosion lua files (for externally defined functions)
-runfile[[../proximityAction/proximityAction.lua]]
-runfile[[../explode/explosion.lua]]
+runfile[[scripts/proximityAction.lua]]
+runfile[[scripts/explosion.lua]]
+runfile[[scripts/PlaySound.lua]]
 
 wand = gadget.PositionInterface("VJWand")
+
+--set up sound files
+blasterSound = SoundWav(vrjLua.findInModelSearchPath([[sounds/blast2.wav]]))
+explodeSound = SoundWav(vrjLua.findInModelSearchPath([[sounds/explode.wav]]))
+blasterSound:setVolume(.2)
+
 
 local obj1 = Transform{
 	position = {0,0,-2},
@@ -43,6 +50,7 @@ end
 local function getNewExplodeFunction(object)
 	local pos = object:getPosition()
 	function r() 
+		explodeSound:trigger(1)
 		explode{pos:x(),pos:y(),pos:z()} 
 		object:getParent(0):removeChild(object)
 		removeObjectFromShootableObjectsTable(object)
@@ -63,9 +71,10 @@ local function createLaser()
 		Transform{
 			orientation = AngleAxis(Degrees(90), Axis{1,0,0}),
 			scale = .03,
-			Model[[laser.ive]],
+			Model[[models/laser.ive]],
 		}
 	}
+	laser:setScale(Vec(.3,.3,.5)) --make laser thinner
 	laser:setAttitude(wand.orientation)
 	laser:getOrCreateStateSet():setMode(0x0B50,osg.StateAttribute.Values.OFF) --turns off lighting for laser xform
 	return laser
@@ -102,6 +111,7 @@ local function enableShootableObjects()
 					end
 					projectile = createLaser()
 					RelativeTo.World:addChild(projectile)
+					blasterSound:trigger(1)
 					createProjectileMotionActionFrame(projectile,5,0)
 					createActionFrameForEachShootableObject(projectile)
 					Actions.waitForRedraw()

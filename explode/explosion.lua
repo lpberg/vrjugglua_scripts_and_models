@@ -5,8 +5,12 @@ AddAppDirectory()
 local function createExplosionModel(pos)
 	local xform = Transform{
 		position = pos,
-		scale = 5,
-		Model[[explosion.ive]],
+		scale = math.random(3,8),
+		Model[[explode1.ive]],
+		Transform{
+			Model[[explode2.ive]],
+			scale = .15
+		}
 	}
 	xform:getOrCreateStateSet():setMode(0x0B50,osg.StateAttribute.Values.OFF)
 	return xform
@@ -32,12 +36,6 @@ end
 
 function explode(pos)
 	for var=1,math.random(1,3),1 do
-		explodeObject(pos, math.random(100,500)/1000) 
+		explodeObject(pos, math.random(700,1000)/1000) 
     end
 end
-
-
-
-
-
-
