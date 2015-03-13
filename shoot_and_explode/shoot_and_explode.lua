@@ -11,7 +11,9 @@ wand = gadget.PositionInterface("VJWand")
 
 --set up sound files
 blasterSound = SoundWav(vrjLua.findInModelSearchPath([[sounds/blast2.wav]]))
+blasterSound.retriggerable = true
 explodeSound = SoundWav(vrjLua.findInModelSearchPath([[sounds/explode.wav]]))
+explodeSound.retriggerable = true
 blasterSound:setVolume(.2)
 
 
