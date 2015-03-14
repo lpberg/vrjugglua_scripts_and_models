@@ -3,11 +3,12 @@ require "AddAppDirectory"
 require("StockModels")
 AddAppDirectory()
 runfile[[ClipPlanes.lua]]
+runfile[[../environments/tron/loadTronFloor.lua]]
 
 --create sample geometry
 teapot = Transform{
 	position = {1.5,1.5,2},
-	orientation = AngleAxis(Degrees(90),Axis{1.0,0.0,0.0}),
+	-- orientation = AngleAxis(Degrees(90),Axis{1.0,0.0,0.0}),
 	Transform{
 		scale = .45,
 		StockModels.Teapot(),

@@ -3,21 +3,22 @@ require "AddAppDirectory"
 AddAppDirectory()
 
 runfile([[Menu.lua]])
+runfile([[../environments/sky_ground/skyground.lua]])
 
 local global_depth = 0.01
 local global_width = 1.2
 local global_height = .15
 
 local button1 = MenuItem{
-	label = "Button1",
+	label = "Open Model...",
 	width = global_width,
 	depth = global_depth,
 	height = global_height,
 }
 
 local button2 = MenuItem{
-	label = "Button 2 State 1",
-	label2 = "Button 2 State 2",
+	label = "Enable Physics",
+	label2 = "Disable Physics",
 	action = function() print ("Button 2 State 1 pressed") end,
 	action2 = function() print ("Button 2 State 2 pressed") end,
 	width = global_width,
@@ -26,14 +27,14 @@ local button2 = MenuItem{
 }
 
 local button3 = MenuItem{
-	label = "Button3",
+	label = "Link States",
 	width = global_width,
 	depth = global_depth,
 	height = global_height,
 }
 
 local button4 = MenuItem{
-	label = "Button4",
+	label = "Navigation Settings",
 	width = global_width,
 	depth = global_depth,
 	height = global_height,
@@ -46,7 +47,9 @@ mymenu = Menu{
 	button4,
 }
 
-mymenu.osg:setPosition(osg.Vec3d(global_width / 2, 1.75, 0))
+mymenu:highlightNext()
+
+mymenu.osg:setPosition(osg.Vec3d((global_width / 2)+1, 1.75, 0))
 
 RelativeTo.Room:addChild(mymenu.osg)
 

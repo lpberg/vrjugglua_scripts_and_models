@@ -11,8 +11,8 @@ ss = RelativeTo.World:getOrCreateStateSet()
 --RelativeTo.World:addChild(Sphere{radius=.23, position = {1.5,2,-6}})
 function doLight1()
 
-	l1 = osg.Light()
-	l1:setAmbient(osg.Vec4(0.3, 0.3, 0.3, 1))
+	l1 = osg.Light(0)
+	l1:setAmbient(osg.Vec4(0.1, 0.1, 0.1, 1))
 	ls1 = osg.LightSource()
 	ls1:setLight(l1)
 	ls1:setLocalStateSetModes(osg.StateAttribute.Values.ON)
@@ -25,7 +25,6 @@ function doLight1()
 end
 -- doLight1()
 function doLight1_5()
-
 	l3 = osg.Light()
 	l3:setLightNum(3)
 	l3:setAmbient(osg.Vec4(.2, .2, .3, 1.0))
@@ -44,7 +43,7 @@ end
 function doLight2()
 
 	l2 = osg.Light()
-	l2:setLightNum(1)
+	l2:setLightNum(2)
 	l2:setAmbient(osg.Vec4(.2, .2, 0.2, 1))
 	
 	ls2 = osg.LightSource()
@@ -59,6 +58,6 @@ function doLight2()
 	l2:setPosition(osg.Vec4(1.5, 1, 0, 1.0))
 end
 
--- doLight1()
+doLight1()
 doLight2()
---doLight1_5()
+doLight1_5()

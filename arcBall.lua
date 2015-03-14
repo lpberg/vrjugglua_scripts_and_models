@@ -2,7 +2,18 @@ require("Actions")
 require("StockModels")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
-dofile(vrjLua.findInModelSearchPath([[env/voyager/loadVoyager.lua]]))
+dofile(vrjLua.findInModelSearchPath([[environments/voyager/loadVoyager.lua]]))
+
+local function changeNodeColor(xform, color)
+	local mat = osg.Material()
+	mat:setColorMode(0x1201);
+	mat:setAmbient (0x0408, osg.Vec4(color[1], color[2], color[3], 1.0))
+	mat:setDiffuse (0x0408, osg.Vec4(0.2, 0.2, 0.2, 1.0))
+	mat:setSpecular(0x0408, osg.Vec4(0.2, 0.2, 0.2, 1.0))
+	mat:setShininess(0x0408, 1)
+	local ss = xform:getOrCreateStateSet()
+	ss:setAttributeAndModes(mat, osg.StateAttribute.Values.ON+osg.StateAttribute.Values.OVERRIDE);
+end
 
 local function MySphere(a)
 	local pos = osg.Vec3(0.0, 0.0, 0.0)
@@ -45,12 +56,18 @@ end
 
 --OBJECT OF INTEREST
 local xform = MatrixTransform{
-	Transform{scale = .25, StockModels.Teapot()}
+	Transform{
+		scale = .05, 
+		position = {0,-.2,0},
+		Model[[models/bunny.osg]],
+		orientation = AngleAxis(Degrees(-90),Axis{1.0,0.0,0.0}),
+	}
 }
+changeNodeColor(xform, {1,0,1,1})
 
 local wand = gadget.PositionInterface("VJWand")
--- local dragBtn = gadget.DigitalInterface("VJButton2")
-local dragBtn = gadget.DigitalInterface("WMButtonB")
+local dragBtn = gadget.DigitalInterface("VJButton2")
+-- local dragBtn = gadget.DigitalInterface("WMButtonB")
 
 Actions.addFrameAction(
 	function()
